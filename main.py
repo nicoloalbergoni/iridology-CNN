@@ -1,13 +1,11 @@
 import os
 import cv2
+import random
 from iris_recog import iris_recognition, pupil_recognition
 from display import draw_circles, show_images
 
 
-def load_image(path):
-    # global images
-    # global real_images
-    # global images_names
+def load_image(path, count=10):
     images = []
     images_names = []
     for file in os.listdir(path):
@@ -21,8 +19,8 @@ def load_image(path):
 def main(path):
     images = load_image(path)
     for img in images:
-        pupil_circles = pupil_recognition(img)
-        iris_circles = iris_recognition(img)
+        pupil_circles = pupil_recognition(img, thresholdpupil=20)
+        iris_circles = iris_recognition(img, thresholdiris=100)
         draw_circles(img, pupil_circles, iris_circles)
         show_images(img)
 

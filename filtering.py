@@ -9,11 +9,11 @@ def filtering(img, invgray=False):
     cimg = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     if invgray is True:
         cimg = cv2.bitwise_not(cimg)
-    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
-    blackhat = cv2.morphologyEx(cimg, cv2.MORPH_BLACKHAT, kernel)
-    bottom_hat_filtered = cv2.add(blackhat, cimg)
+    # kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+    # blackhat = cv2.morphologyEx(cimg, cv2.MORPH_BLACKHAT, kernel)
+    # bottom_hat_filtered = cv2.add(blackhat, cimg)
     #final_img = cv2.medianBlur(bottom_hat_filtered, 17)
-    final_img = cv2.blur(bottom_hat_filtered, (3, 3))
+    final_img = cv2.blur(cimg, (3, 3))
     return final_img
 
 
