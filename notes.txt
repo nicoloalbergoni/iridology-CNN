@@ -1,1 +1,2 @@
-The key parameter is param2, the so-called accumulator threshold. Basically, the higher it is the less circles you get. And these circles have a higher probability of being correct.
+The key parameter is param2, the so-called accumulator threshold. 
+Basically, the higher it is the less circles you get. And these circles have a higher probability of being correct.
