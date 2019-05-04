@@ -12,17 +12,28 @@ def load_image(path, count=10):
         title = file.title().lower()
         if title.split('.')[-1] == 'jpg':
             images_names.append(title)
-            images.append(cv2.imread(os.path.join(path, title)))
+            im = cv2.imread(os.path.join(path, title))
+            y, x, _ = im.shape
+            if y < x:
+                new_y = int(y*0.1)
+                new_x = int((x - (y-2*new_y)) / 2)
+                #margin = int(x-new_x)
+                im = im[new_y:int((y - new_y)), new_x:int(x-new_x)]
+                im_r = cv2.resize(im, (300, 300))
+                images.append(im_r)
+            else:
+                im_r = cv2.resize(im, (200, 200))
+                images.append(im_r)
     return images
 
 
 def main(path):
     images = load_image(path)
     for img in images:
-        pupil_circles = pupil_recognition(img, thresholdpupil=20)
+        pupil_circles = pupil_recognition(img, thresholdpupil=25)
         iris_circles = iris_recognition(img, thresholdiris=100)
         draw_circles(img, pupil_circles, iris_circles)
         show_images(img)
 
 
-main('C:\\Users\\Albe\\Desktop\\tesi-triennale\\images')
+main('./images')

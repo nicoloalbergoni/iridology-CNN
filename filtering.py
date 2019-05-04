@@ -3,17 +3,30 @@ import numpy as np
 from display import show_images
 
 
-def filtering(img, invgray=False):
+def filtering(img, invgray=False, sharpen=False):
     frame = img
 
     cimg = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     if invgray is True:
         cimg = cv2.bitwise_not(cimg)
-    # kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
-    # blackhat = cv2.morphologyEx(cimg, cv2.MORPH_BLACKHAT, kernel)
-    # bottom_hat_filtered = cv2.add(blackhat, cimg)
-    #final_img = cv2.medianBlur(bottom_hat_filtered, 17)
-    final_img = cv2.blur(cimg, (3, 3))
+
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+    blackhat = cv2.morphologyEx(cimg, cv2.MORPH_BLACKHAT, kernel)
+    bottom_hat_filtered = cv2.add(blackhat, cimg)
+    # final_img = cv2.medianBlur(bottom_hat_filtered, 17)
+    # final_img = cv2.blur(bottom_hat_filtered, (3, 3))
+
+    final_img = cv2.GaussianBlur(bottom_hat_filtered, (0, 0), 1)
+
+    #final_img = cv2.bilateralFilter(cimg, 9, 75, 75)
+
+    if sharpen is True:
+        # ---Sharpening filter----
+        kernel = np.array([[-1, -1, -1], [-1, 9, -1], [-1, -1, -1]])
+        final_img = cv2.filter2D(final_img, -1, kernel)
+
+        kernel = np.ones((5, 5), np.float32)/25
+        final_img = cv2.filter2D(final_img, -1, kernel)
     return final_img
 
 
