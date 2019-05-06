@@ -16,7 +16,7 @@ def filtering(img, invgray=False, sharpen=False):
     # final_img = cv2.medianBlur(bottom_hat_filtered, 17)
     # final_img = cv2.blur(bottom_hat_filtered, (3, 3))
 
-    final_img = cv2.GaussianBlur(bottom_hat_filtered, (0, 0), 1)
+    final_img = cv2.GaussianBlur(bottom_hat_filtered, (5, 5), 0)
 
     #final_img = cv2.bilateralFilter(cimg, 9, 75, 75)
 
@@ -43,3 +43,14 @@ def adjust_gamma(image, gamma=1.0):
                       for i in np.arange(0, 256)]).astype("uint8")
     # apply gamma correction using the lookup table
     return cv2.LUT(image, table)
+
+
+def threshold(img, tValue=100, adaptive=False, binaryInv=False):
+    if adaptive is False:
+        _, thresh = cv2.threshold(img, tValue,
+                                  255, cv2.THRESH_BINARY_INV if binaryInv else cv2.THRESH_BINARY)
+    else:
+        thresh = cv2.adaptiveThreshold(
+            img, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 11, 2)
+
+    return thresh

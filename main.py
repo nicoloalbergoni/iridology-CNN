@@ -30,7 +30,7 @@ def load_image(path, count=10):
 def main(path):
     images = load_image(path)
     for img in images:
-        pupil_circles = pupil_recognition(img, thresholdpupil=25)
+        pupil_circles = pupil_recognition(img, thresholdpupil=32)
         iris_circles = iris_recognition(img, thresholdiris=100)
         draw_circles(img, pupil_circles, iris_circles)
         show_images(img)
