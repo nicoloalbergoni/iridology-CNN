@@ -31,7 +31,7 @@ def main(path):
     images = load_image(path)
     for img in images:
         pupil_circles = pupil_recognition(img, thresholdpupil=32)
-        iris_circles = iris_recognition(img, thresholdiris=100)
+        iris_circles = iris_recognition(img, thresholdiris=160)
         draw_circles(img, pupil_circles, iris_circles)
         show_images(img)
 

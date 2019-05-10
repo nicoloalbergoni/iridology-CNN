@@ -7,3 +7,9 @@ param1: Gradient value used to handle edge detection in the Yuen et al. method.
 param2: Accumulator threshold value for the cv2.HOUGH_GRADIENT method. The smaller the threshold is, the more circles will be detected (including false circles). The larger the threshold is, the more circles will potentially be returned.
 minRadius: Minimum size of the radius (in pixels).
 maxRadius: Maximum size of the radius (in pixels).
+
+--------------------
+
+Parametri di default semi-funzionanti
+thresholdpupil = 32 con threshold binario invertito
+thresholdiris = 100 con threshold adattivo 
