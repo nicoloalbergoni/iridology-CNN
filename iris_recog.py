@@ -32,8 +32,15 @@ def iris_recognition(image, thresholdiris=100):
     circles = cv2.HoughCircles(
         canny, cv2.HOUGH_GRADIENT, 0.8, image.shape[0], param1=30, param2=10, minRadius=90, maxRadius=140)
 
+    height, width, depth = image.shape
+    circle_img = np.zeros((height,width), np.uint8)
+    cv2.circle(circle_img,(circles[0,0][0], circles[0,0][1]), circles[0,0][2],255,thickness=-1)
+    masked_data = cv2.bitwise_and(image, image, mask=circle_img)
+
+    
     cv2.imshow('Filtered', f_image)
     cv2.imshow('Iris Threshold', thresh)
     cv2.imshow('Canny', canny)
+    cv2.imshow('Masked-img', masked_data)
 
     return circles
