@@ -22,7 +22,7 @@ def load_image(path, count=10):
                 im_r = cv2.resize(im, (300, 300))
                 images.append(im_r)
             else:
-                im_r = cv2.resize(im, (200, 200))
+                im_r = cv2.resize(im, (300, 300))
                 images.append(im_r)
     return images
 
@@ -30,7 +30,7 @@ def load_image(path, count=10):
 def main(path):
     images = load_image(path)
     for img in images:
-        pupil_circles = pupil_recognition(img, thresholdpupil=32)
+        pupil_circles = pupil_recognition(img, thresholdpupil=35)
         iris_circles = iris_recognition(img, thresholdiris=160)
         draw_circles(img, pupil_circles, iris_circles)
         show_images(img)

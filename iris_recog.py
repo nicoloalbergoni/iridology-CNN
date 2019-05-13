@@ -20,11 +20,11 @@ def pupil_recognition(image, thresholdpupil=20):
 
 
 def iris_recognition(image, thresholdiris=100):
-    f_image = increase_brightness(image, value=70)
+    f_image = increase_brightness(image, value=50)
     f_image = filtering(f_image, invgray=False, sharpen=False)
     # f_image = adjust_gamma(f_image, 1.5)
     thresh = threshold(f_image, tValue=thresholdiris,
-                       adaptive=False, binaryInv=False)
+                       adaptive=False, binaryInv=False, bg_area=True)
     # high_thresh, thresh = cv2.threshold(
     #     f_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     # lowThresh = 0.5*high_thresh

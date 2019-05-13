@@ -45,13 +45,23 @@ def adjust_gamma(image, gamma=1.0):
     return cv2.LUT(image, table)
 
 
-def threshold(img, tValue=100, adaptive=False, binaryInv=False):
-    if adaptive is False:
+def threshold(img, tValue=100, adaptive=False, binaryInv=False, bg_area=False):
+    if adaptive is False and bg_area is False:
         _, thresh = cv2.threshold(img, tValue,
                                   255, cv2.THRESH_BINARY_INV if binaryInv else cv2.THRESH_BINARY)
-    else:
+    elif adaptive is True and bg_area is False:
         thresh = cv2.adaptiveThreshold(
             img, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 9, 1)
+
+    if bg_area is True and adaptive is False:
+        ret, thresh_otsu = cv2.threshold(
+            img, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+        # noise removal
+        kernel = np.ones((3, 3), np.uint8)
+        opening = cv2.morphologyEx(
+            thresh_otsu, cv2.MORPH_OPEN, kernel, iterations=2)
+        # sure background area
+        thresh = cv2.dilate(opening, kernel, iterations=3)
 
     return thresh
 
@@ -59,11 +69,16 @@ def threshold(img, tValue=100, adaptive=False, binaryInv=False):
 def increase_brightness(img, value=30):
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     h, s, v = cv2.split(hsv)
+    mean_v = v.mean()
 
-    lim = 255 - value
-    v[v > lim] = 255
-    v[v <= lim] += value
+    print(mean_v)
 
-    final_hsv = cv2.merge((h, s, v))
-    img = cv2.cvtColor(final_hsv, cv2.COLOR_HSV2BGR)
+    if mean_v < 140:
+        lim = 255 - value
+        v[v > lim] = 255
+        v[v <= lim] += value
+
+        hsv = cv2.merge((h, s, v))
+
+    img = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
     return img
