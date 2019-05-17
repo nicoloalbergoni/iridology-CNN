@@ -3,10 +3,14 @@ import numpy as np
 from display import show_images
 
 
-def filtering(img, invgray=False, sharpen=False):
+def filtering(img, invgray=False, sharpen=False, grayscale=True):
     frame = img
 
-    cimg = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    if grayscale is True:
+        cimg = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    else:
+        cimg = frame
+
     if invgray is True:
         cimg = cv2.bitwise_not(cimg)
 
@@ -38,6 +42,21 @@ def adjust_gamma(image, gamma=1.0):
     :param gamma: adjusting coefficient
     :return: adjusted image
     """
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    h, s, v = cv2.split(hsv)
+    mean_v = v.mean()
+
+    print(mean_v)
+
+    if mean_v > 165:
+        gamma = 0.7
+    elif mean_v < 155:
+        gamma = 1.3
+
+    hsv = cv2.merge((h, s, v))
+
+    image = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
+
     inv_gamma = 1.0 / gamma
     table = np.array([((i / 255.0) ** inv_gamma) * 255
                       for i in np.arange(0, 256)]).astype("uint8")
@@ -45,25 +64,32 @@ def adjust_gamma(image, gamma=1.0):
     return cv2.LUT(image, table)
 
 
-def threshold(img, tValue=100, adaptive=False, binaryInv=False, bg_area=False):
-    if adaptive is False and bg_area is False:
+def threshold(img, tValue=100, adaptive=False, binaryInv=False, otsu=False, dilate=False):
+    if adaptive is False and otsu is False:
         _, thresh = cv2.threshold(img, tValue,
                                   255, cv2.THRESH_BINARY_INV if binaryInv else cv2.THRESH_BINARY)
-    elif adaptive is True and bg_area is False:
+    elif adaptive is True and otsu is False:
         thresh = cv2.adaptiveThreshold(
             img, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 9, 1)
-
-    if bg_area is True and adaptive is False:
-        ret, thresh_otsu = cv2.threshold(
+    elif adaptive is False and otsu is True:
+        ret, thresh = cv2.threshold(
             img, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
-        # noise removal
-        kernel = np.ones((3, 3), np.uint8)
-        opening = cv2.morphologyEx(
-            thresh_otsu, cv2.MORPH_OPEN, kernel, iterations=2)
-        # sure background area
-        thresh = cv2.dilate(opening, kernel, iterations=3)
+    else:
+        thresh = img
+
+    if dilate is True:
+        thresh = dilate_thresh(thresh)
 
     return thresh
+
+
+def dilate_thresh(thresh):
+    kernel = np.ones((3, 3), np.uint8)
+    opening = cv2.morphologyEx(
+        thresh, cv2.MORPH_OPEN, kernel, iterations=2)
+    thresh_img = cv2.dilate(opening, kernel, iterations=3)
+
+    return thresh_img
 
 
 def increase_brightness(img, value=30):

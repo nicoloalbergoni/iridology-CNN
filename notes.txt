@@ -11,5 +11,5 @@ maxRadius: Maximum size of the radius (in pixels).
 --------------------
 
 Parametri di default semi-funzionanti
-thresholdpupil = 32 con threshold binario invertito
-thresholdiris = 100 con threshold adattivo 
+thresholdpupil = 70 con threshold binario invertito
+thresholdiris = 160 con threshold binario 
