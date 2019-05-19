@@ -1,7 +1,8 @@
 import os
 import cv2
 import random
-from processing import iris_recognition, pupil_recognition, segmentation
+import numpy as np
+from processing import iris_recognition, pupil_recognition, segmentation, daugman_normalizaiton, crop_image
 from display import draw_circles, show_images
 
 def resize_img(im, imgsize=300):
@@ -40,9 +41,16 @@ def main(path):
     for img in images:
         pupil_circles = pupil_recognition(img, thresholdpupil=70)
         iris_circles = iris_recognition(img, thresholdiris=160)
-        masked_image = segmentation(img, iris_circles, pupil_circles, -20, 20)
+        masked_image, mask = segmentation(img, iris_circles, pupil_circles, -20, 20)
         draw_circles(img, pupil_circles, iris_circles)
         cv2.imshow('Masked - img', masked_image)
+
+        cropped_image = crop_image(masked_image)
+        cv2.imshow('Cropped img', cropped_image)
+        print(cropped_image.shape)
+
+        # norm_img = daugman_normalizaiton(cropped_image, 30, 60, iris_circles[2] - pupil_circles[2], 0)
+        # cv2.imshow('Normalized image', norm_img)
         show_images(img)
 
 
