@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from display import draw_circles, show_images
+from display import draw_ellipse
 from filtering import filtering, adjust_gamma, threshold, increase_brightness
 
 
@@ -16,7 +16,13 @@ def pupil_recognition(image, thresholdpupil=20):
         thresh, cv2.HOUGH_GRADIENT, 0.8, image.shape[0], param1=20, param2=5, minRadius=18, maxRadius=60)
 
     cv2.imshow('Pupil Threshold', thresh)
-    return circles
+
+    if circles.shape[0:2] == (1, 1):
+        return circles[0, 0]
+    else:
+        # TODO: Gestire il caso in cui trovo più cerchi
+        pass
+
 
 
 def iris_recognition(image, thresholdiris=100):
@@ -32,16 +38,28 @@ def iris_recognition(image, thresholdiris=100):
     circles = cv2.HoughCircles(
         canny, cv2.HOUGH_GRADIENT, 0.8, image.shape[0], param1=30, param2=10, minRadius=90, maxRadius=130)
 
-    if circles is not None:
-        height, width, depth = image.shape
-        circle_img = np.zeros((height, width), np.uint8)
-        cv2.circle(circle_img, (circles[0, 0][0], circles[0, 0]
-                                [1]), circles[0, 0][2], 255, thickness=-1)
-        masked_data = cv2.bitwise_and(image, image, mask=circle_img)
-        cv2.imshow('Masked-img', masked_data)
+
+
 
     cv2.imshow('Filtered', f_image)
     cv2.imshow('Iris Threshold', thresh)
     cv2.imshow('Canny', canny)
 
-    return circles
+    if circles.shape[0:2] == (1, 1):
+        return circles[0, 0]
+    else:
+        # TODO: Gestire il caso in cui trovo più cerchi
+        pass
+
+
+def segmentation(image, iris_circle, pupil_circle, startangle, endangle):
+    segmented = image
+    height, width, _ = segmented.shape
+    outer_sector = np.zeros((height, width), np.uint8)
+    pupil_sector = np.zeros((height, width), np.uint8)
+    draw_ellipse(outer_sector, (iris_circle[0], iris_circle[1]), (iris_circle[2], iris_circle[2]), 0, -startangle, -endangle, 255, thickness=-1)
+    cv2.circle(pupil_sector, (pupil_circle[0], pupil_circle[1]), int(pupil_circle[2]), 255, thickness=-1)
+    mask = cv2.subtract(outer_sector, pupil_sector)
+    masked_image= cv2.bitwise_and(segmented, segmented, mask=mask)
+
+    return masked_image

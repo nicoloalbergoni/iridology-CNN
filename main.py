@@ -1,9 +1,8 @@
 import os
 import cv2
 import random
-from iris_recog import iris_recognition, pupil_recognition
+from processing import iris_recognition, pupil_recognition, segmentation
 from display import draw_circles, show_images
-
 
 def resize_img(im, imgsize=300):
     y, x, _ = im.shape
@@ -41,8 +40,10 @@ def main(path):
     for img in images:
         pupil_circles = pupil_recognition(img, thresholdpupil=70)
         iris_circles = iris_recognition(img, thresholdiris=160)
+        masked_image = segmentation(img, iris_circles, pupil_circles, -20, 20)
         draw_circles(img, pupil_circles, iris_circles)
+        cv2.imshow('Masked - img', masked_image)
         show_images(img)
 
 
-main('C:\\Users\\Albe\\Desktop\\CASIA_DB')
+main('./CASIA_DB')
