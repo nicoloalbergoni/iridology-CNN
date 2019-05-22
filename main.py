@@ -2,8 +2,9 @@ import os
 import cv2
 import random
 import numpy as np
-from processing import iris_recognition, pupil_recognition, segmentation, daugman_normalizaiton, crop_image
+from processing import *
 from display import draw_circles, show_images
+
 
 def resize_img(im, imgsize=300):
     y, x, _ = im.shape
@@ -39,18 +40,25 @@ def load_image(path, count=10, extention='jpg', resize=True):
 def main(path):
     images = load_image(path, extention='jpg', resize=False)
     for img in images:
-        pupil_circles = pupil_recognition(img, thresholdpupil=70)
-        iris_circles = iris_recognition(img, thresholdiris=160)
-        masked_image, mask = segmentation(img, iris_circles, pupil_circles, -20, 20)
-        draw_circles(img, pupil_circles, iris_circles)
-        cv2.imshow('Masked - img', masked_image)
+        pupil_circle = pupil_recognition(img, thresholdpupil=70)
+        iris_circle = iris_recognition(img, thresholdiris=160)
 
-        cropped_image = crop_image(masked_image)
-        cv2.imshow('Cropped img', cropped_image)
-        print(cropped_image.shape)
+        segmented_image, mask = segmentation(
+            img, iris_circle, pupil_circle, 300, 360)
 
-        # norm_img = daugman_normalizaiton(cropped_image, 30, 60, iris_circles[2] - pupil_circles[2], 0)
-        # cv2.imshow('Normalized image', norm_img)
+        cv2.imshow('Segmented image', segmented_image)
+
+        # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+        normalized_img = daugman_normalizaiton(segmented_image, iris_circle, 0,
+                                               startangle=300, endangle=360)
+
+        cropped_image = crop_image(normalized_img, offset=0, tollerance=50)
+        cv2.imshow('Cropped image', cropped_image)
+
+        cv2.imshow('Normalized/Cropped image', normalized_img)
+
+        draw_circles(img, pupil_circle, iris_circle)
         show_images(img)
 
 

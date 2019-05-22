@@ -1,5 +1,7 @@
 import cv2
 import numpy as np
+from tqdm import tqdm
+from scipy.interpolate import interp1d
 from display import draw_ellipse
 from filtering import filtering, adjust_gamma, threshold, increase_brightness
 
@@ -53,46 +55,65 @@ def segmentation(image, iris_circle, pupil_circle, startangle, endangle):
     height, width = segmented.shape
     outer_sector = np.zeros((height, width), np.uint8)
     pupil_sector = np.zeros((height, width), np.uint8)
-    draw_ellipse(outer_sector, (iris_circle[0], iris_circle[1]), (iris_circle[2], iris_circle[2]), 0, -startangle, -endangle, 255, thickness=-1)
-    cv2.circle(pupil_sector, (pupil_circle[0], pupil_circle[1]), int(pupil_circle[2]), 255, thickness=-1)
+    draw_ellipse(outer_sector, (iris_circle[0], iris_circle[1]), (
+        iris_circle[2], iris_circle[2]), 0, -startangle, -endangle, 255, thickness=-1)
+    cv2.circle(pupil_sector, (pupil_circle[0], pupil_circle[1]), int(
+        pupil_circle[2]), 255, thickness=-1)
     mask = cv2.subtract(outer_sector, pupil_sector)
     masked_image = cv2.bitwise_and(segmented, segmented, mask=mask)
 
     return masked_image, mask
 
 
-def daugman_normalizaiton(image, height, width, r_in, r_out):
-    thetas = np.arange(0, 2 * np.pi, 2 * np.pi / width)  # Theta values
-    r_out = r_in + r_out
-    # Create empty flatten image
-    flat = np.zeros((height,width, 3), np.uint8)
-    circle_x = int(image.shape[0] / 2)
-    circle_y = int(image.shape[1] / 2)
+def crop_image(masked_image, offset=30, tollerance=80):
+    mask = masked_image > tollerance
 
-    for i in range(width):
-        for j in range(height):
-            theta = thetas[i]  # value of theta coordinate
-            r_pro = j / height  # value of r coordinate(normalized)
+    # Coordinates of non-black pixels.
+    coords = np.argwhere(mask)
 
-            # get coordinate of boundaries
-            Xi = circle_x + r_in * np.cos(theta)
-            Yi = circle_y + r_in * np.sin(theta)
-            Xo = circle_x + r_out * np.cos(theta)
-            Yo = circle_y + r_out * np.sin(theta)
+    # Bounding box of non-black pixels.
+    x0, y0 = coords.min(axis=0)
+    x1, y1 = coords.max(axis=0) + 1   # slices are exclusive at the top
 
-            # the matched cartesian coordinates for the polar coordinates
-            Xc = (1 - r_pro) * Xi + r_pro * Xo
-            Yc = (1 - r_pro) * Yi + r_pro * Yo
+    # Get the contents of the bounding box.
+    cropped = masked_image[x0 - offset: x1 + offset, y0 - offset: y1 + offset]
+    print('Cropped Image Shape', cropped.shape)
 
-            print(i, j)
-            color = image[int(Xc)][int(Yc)]  # color of the pixel
-
-            flat[j][i] = color
-    return flat  # liang
+    return cropped
 
 
-def crop_image(img,tol=0):
-    # img is image data
-    # tol  is tolerance
-    mask = img > tol
-    return img[np.ix_(mask.any(1), mask.any(0))]
+def daugman_normalizaiton(original_eye, circle, pupil_radius=0, startangle=0, endangle=45):
+    
+    
+    start_angle = (360 - endangle) * np.pi / 180
+    end_angle = (360 - startangle) * np.pi / 180
+    
+    iris_coordinates = (circle[0], circle[1])
+    
+    
+    x = int(iris_coordinates[0])
+    y = int(iris_coordinates[1])
+
+    w = int(round(circle[2]) + 0)
+    h = int(round(circle[2]) + 0)
+
+    #cv2.circle(original_eye, iris_coordinates, int(circle[2]), (255,0,0), thickness=2)
+    iris_image = original_eye[y-h:y+h,x-w:x+w]
+    
+    
+    iris_image_to_show = cv2.resize(iris_image, (iris_image.shape[1]*2, iris_image.shape[0]*2))
+
+    q = np.arange(start_angle, end_angle, 0.01) #theta
+    inn = np.arange(int(pupil_radius), int(iris_image_to_show.shape[0]/2), 1) #radius
+
+    cartisian_image = np.empty(shape = [inn.size, int(iris_image_to_show.shape[1])])
+    m = interp1d([np.pi*2, 0],[pupil_radius,iris_image_to_show.shape[1]])
+
+    for r in tqdm(inn):
+        for t in tqdm(q):
+            polarX = int((r * np.cos(t)) + iris_image_to_show.shape[1]/2)
+            polarY = int((r * np.sin(t)) + iris_image_to_show.shape[0]/2)
+            cartisian_image[r][int(m(t) - 1)] = iris_image_to_show[polarY][polarX]
+    
+    cartisian_image = cartisian_image.astype('uint8')     
+    return cartisian_image
