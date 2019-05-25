@@ -1,9 +1,10 @@
+import os
 from processing import *
 from display import draw_circles, show_images
-from utils import load_image, resize_segment, save_segments
+from utils import load_image, resize_segment, save_segments, check_folders
 
 
-def main(path):
+def create_data(path):
     cropped_array = []
     images = load_image(path, extention='jpg', resize=False)
     for img in tqdm(images):
@@ -11,7 +12,7 @@ def main(path):
         iris_circle = iris_recognition(img, thresholdiris=160)
 
         segmented_image, mask = segmentation(
-            img, iris_circle, pupil_circle, 30, 50)
+            img, iris_circle, pupil_circle, 90, 180)
 
         cv2.imshow('Segmented image', segmented_image)
 
@@ -23,16 +24,30 @@ def main(path):
         cropped_image = crop_image(segmented_image, offset=0, tollerance=50)
         cropped_array.append(cropped_image)
 
-        #cv2.imshow('Cropped image', cropped_image)
+        # cv2.imshow('Cropped image', cropped_image)
 
-
-        #cv2.imshow('Normalized/Cropped image', normalized_img)
+        # cv2.imshow('Normalized/Cropped image', normalized_img)
 
         draw_circles(img, pupil_circle, iris_circle)
-        #show_images(img)
-
+        # show_images(img)
     resized_segments = resize_segment(cropped_array)
-    save_segments(resized_segments)
+    return resized_segments
+
+
+def main():
+    DATADIR = "./DATA_IMAGES"
+    CATEGORIES = ['DB_PROBS', 'DB_NORMAL']
+
+    # TODO: Sistemare media resize immagini
+
+    if check_folders(DATADIR) is False:
+        raise Exception('Non sono presenti immagini nelle cartelle DB_PROBS e DB_NORMAL')
+
+    for category in tqdm(CATEGORIES):
+        data_path = os.path.join(DATADIR, category)
+        resized_segments = create_data(data_path)
+        save_segments(resized_segments, category)
+
 
 if __name__ == '__main__':
-    main('./CASIA_DB')
+    main()
