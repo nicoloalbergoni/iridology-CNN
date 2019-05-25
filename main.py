@@ -1,65 +1,38 @@
-import os
-import cv2
-import random
-import numpy as np
 from processing import *
 from display import draw_circles, show_images
-
-
-def resize_img(im, imgsize=300):
-    y, x, _ = im.shape
-    if y < x:
-        new_y = int(y*0.1)
-        new_x = int((x - (y-2*new_y)) / 2)
-        #margin = int(x-new_x)
-        im = im[new_y:int((y - new_y)), new_x:int(x-new_x)]
-        im_r = cv2.resize(im, (imgsize, imgsize))
-
-    else:
-        im_r = cv2.resize(im, (imgsize, imgsize))
-
-    return im_r
-
-
-def load_image(path, count=10, extention='jpg', resize=True):
-    images = []
-    images_names = []
-    for file in os.listdir(path):
-        title = file.title().lower()
-        if title.split('.')[-1] == extention:
-            images_names.append(title)
-            im = cv2.imread(os.path.join(path, title))
-
-            im = resize_img(im) if resize else im
-
-            images.append(im)
-    random.shuffle(images)
-    return images
+from utils import load_image, resize_segment, save_segments
 
 
 def main(path):
+    cropped_array = []
     images = load_image(path, extention='jpg', resize=False)
-    for img in images:
+    for img in tqdm(images):
         pupil_circle = pupil_recognition(img, thresholdpupil=70)
         iris_circle = iris_recognition(img, thresholdiris=160)
 
         segmented_image, mask = segmentation(
-            img, iris_circle, pupil_circle, 300, 360)
+            img, iris_circle, pupil_circle, 30, 50)
 
         cv2.imshow('Segmented image', segmented_image)
 
         # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-        normalized_img = daugman_normalizaiton(segmented_image, iris_circle, 0,
-                                               startangle=300, endangle=360)
+        # normalized_img = daugman_normalizaiton(segmented_image, iris_circle, 0,
+        #                                        startangle=300, endangle=360)
 
-        cropped_image = crop_image(normalized_img, offset=0, tollerance=50)
-        cv2.imshow('Cropped image', cropped_image)
+        cropped_image = crop_image(segmented_image, offset=0, tollerance=50)
+        cropped_array.append(cropped_image)
 
-        cv2.imshow('Normalized/Cropped image', normalized_img)
+        #cv2.imshow('Cropped image', cropped_image)
+
+
+        #cv2.imshow('Normalized/Cropped image', normalized_img)
 
         draw_circles(img, pupil_circle, iris_circle)
-        show_images(img)
+        #show_images(img)
 
+    resized_segments = resize_segment(cropped_array)
+    save_segments(resized_segments)
 
-main('./CASIA_DB')
+if __name__ == '__main__':
+    main('./CASIA_DB')

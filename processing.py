@@ -77,7 +77,7 @@ def crop_image(masked_image, offset=30, tollerance=80):
 
     # Get the contents of the bounding box.
     cropped = masked_image[x0 - offset: x1 + offset, y0 - offset: y1 + offset]
-    print('Cropped Image Shape', cropped.shape)
+    #print('Cropped Image Shape', cropped.shape)
 
     return cropped
 
