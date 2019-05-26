@@ -246,4 +246,5 @@ pip-selfcheck.json
 
 ### Personal ###
 /MMU2_Database
-/tmp_seg
+/TEMP_SEG
+/DATA_IMAGES

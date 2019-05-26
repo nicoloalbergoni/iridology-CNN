@@ -1,7 +1,7 @@
 import os
 from processing import *
 from display import draw_circles, show_images
-from utils import load_image, resize_segment, save_segments, check_folders
+from utils import load_image, resize_segments, save_segments, check_folders, get_average_shape
 
 
 def create_data(path):
@@ -13,39 +13,36 @@ def create_data(path):
 
         segmented_image, mask = segmentation(
             img, iris_circle, pupil_circle, 90, 180)
-
         cv2.imshow('Segmented image', segmented_image)
-
-        # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-        # normalized_img = daugman_normalizaiton(segmented_image, iris_circle, 0,
-        #                                        startangle=300, endangle=360)
 
         cropped_image = crop_image(segmented_image, offset=0, tollerance=50)
         cropped_array.append(cropped_image)
-
         # cv2.imshow('Cropped image', cropped_image)
-
-        # cv2.imshow('Normalized/Cropped image', normalized_img)
 
         draw_circles(img, pupil_circle, iris_circle)
         # show_images(img)
-    resized_segments = resize_segment(cropped_array)
-    return resized_segments
+
+    return cropped_array
 
 
 def main():
     DATADIR = "./DATA_IMAGES"
     CATEGORIES = ['DB_PROBS', 'DB_NORMAL']
+    cropped_dict = {}
 
-    # TODO: Sistemare media resize immagini
+    # TODO: Vedere se bisogna cancellare le cartelle di dati ad ogni avvio
 
     if check_folders(DATADIR) is False:
         raise Exception('Non sono presenti immagini nelle cartelle DB_PROBS e DB_NORMAL')
 
     for category in tqdm(CATEGORIES):
         data_path = os.path.join(DATADIR, category)
-        resized_segments = create_data(data_path)
+        cropped_dict[category] = create_data(data_path)
+
+    average_shape = get_average_shape(cropped_dict)
+
+    for category in tqdm(CATEGORIES):
+        resized_segments = resize_segments(cropped_dict[category], average_shape)
         save_segments(resized_segments, category)
 
 

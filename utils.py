@@ -35,11 +35,14 @@ def load_image(path, count=10, extention='jpg', resize=True):
     return images
 
 
-def resize_segment(cropped_array):
-    shapes = [c.shape for c in cropped_array]
+def get_average_shape(cropped_dict):
+    shapes = np.concatenate(([c.shape for c in cropped_dict['DB_PROBS']], [c.shape for c in cropped_dict['DB_NORMAL']]))
     means = np.around(np.mean(shapes, axis=0)).astype(int)
-    #print('Means: ', means)
-    resized_segments = [cv2.resize(c, (means[1], means[0]), interpolation=cv2.INTER_AREA) for c in cropped_array]
+    return means
+
+
+def resize_segments(cropped_array, resizeshape):
+    resized_segments = [cv2.resize(c, (resizeshape[1], resizeshape[0]), interpolation=cv2.INTER_AREA) for c in cropped_array]
     return resized_segments
 
 
