@@ -2,8 +2,8 @@ import cv2
 import numpy as np
 from tqdm import tqdm
 from scipy.interpolate import interp1d
-from display import draw_ellipse
-from filtering import filtering, adjust_gamma, threshold, increase_brightness
+from Preprocessing.display import draw_ellipse
+from Preprocessing.filtering import filtering, threshold
 
 
 def pupil_recognition(image, thresholdpupil=20):
