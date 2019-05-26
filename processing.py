@@ -19,7 +19,10 @@ def pupil_recognition(image, thresholdpupil=20):
 
     cv2.imshow('Pupil Threshold', thresh)
 
-    if circles.shape[0:2] == (1, 1):
+    if circles is None:
+        # TODO: Gestire il caso in cui non trova cerchi
+        pass
+    elif circles.shape[0:2] == (1, 1):
         return circles[0, 0]
     else:
         # TODO: Gestire il caso in cui trovo più cerchi
@@ -43,7 +46,10 @@ def iris_recognition(image, thresholdiris=100):
     cv2.imshow('Iris Threshold', thresh)
     cv2.imshow('Canny', canny)
 
-    if circles.shape[0:2] == (1, 1):
+    if circles is None:
+        # TODO: Gestire il caso in cui non trova cerchi
+        pass
+    elif circles.shape[0:2] == (1, 1):
         return circles[0, 0]
     else:
         # TODO: Gestire il caso in cui trovo più cerchi

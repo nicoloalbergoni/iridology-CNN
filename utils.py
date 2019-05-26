@@ -2,7 +2,7 @@ import cv2
 import os
 import random
 import numpy as np
-
+import shutil
 
 def resize_img(im, imgsize=300):
     y, x, _ = im.shape
@@ -52,6 +52,11 @@ def save_segments(resized_segments, path):
     path = os.path.join('./TEMP_SEG', path + '_SEG')
     if not os.path.exists(path):
         os.makedirs(path)
+    else:
+        # Se la cartella esiste cancella tutti i file al suo interno
+        shutil.rmtree(path)
+        os.makedirs(path)
+
     for index, img in enumerate(resized_segments):
         complete_path = os.path.join(path, str(index) + '.jpg')
         cv2.imwrite(complete_path, img)

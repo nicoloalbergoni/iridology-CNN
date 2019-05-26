@@ -12,7 +12,7 @@ def create_data(path):
         iris_circle = iris_recognition(img, thresholdiris=160)
 
         segmented_image, mask = segmentation(
-            img, iris_circle, pupil_circle, 90, 180)
+            img, iris_circle, pupil_circle, startangle=180, endangle=230)
         cv2.imshow('Segmented image', segmented_image)
 
         cropped_image = crop_image(segmented_image, offset=0, tollerance=50)
@@ -44,7 +44,6 @@ def main():
     for category in tqdm(CATEGORIES):
         resized_segments = resize_segments(cropped_dict[category], average_shape)
         save_segments(resized_segments, category)
-
 
 if __name__ == '__main__':
     main()
