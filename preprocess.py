@@ -1,7 +1,7 @@
 import os
-from processing import *
-from display import draw_circles, show_images
-from utils import load_image, resize_segments, save_segments, check_folders, get_average_shape
+from Preprocessing.processing import *
+from Preprocessing.display import draw_circles
+from Preprocessing.utils import load_image, resize_segments, save_segments, check_folders, get_average_shape
 
 
 def create_data(path):
@@ -44,6 +44,7 @@ def main():
     for category in tqdm(CATEGORIES):
         resized_segments = resize_segments(cropped_dict[category], average_shape)
         save_segments(resized_segments, category)
+
 
 if __name__ == '__main__':
     main()

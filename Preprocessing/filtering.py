@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-from display import show_images
 
 
 def filtering(img, invgray=False, sharpen=False, grayscale=True):
