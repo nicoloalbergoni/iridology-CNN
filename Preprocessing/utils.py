@@ -91,5 +91,3 @@ def check_folders(datadir):
 
 
 
-
-

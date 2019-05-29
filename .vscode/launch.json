@@ -5,10 +5,10 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Python: File corrente",
+      "name": "Debug",
       "type": "python",
       "request": "launch",
-      "program": "C:\\Users\\Albe\\Desktop\\tesi-triennale\\main.py",
+      "program": "C:\\Users\\Albe\\Desktop\\tesi-triennale\\preprocess.py",
       "console": "integratedTerminal"
     }
   ]

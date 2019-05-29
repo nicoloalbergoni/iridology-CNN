@@ -4,6 +4,7 @@ from tqdm import tqdm
 from scipy.interpolate import interp1d
 from Preprocessing.display import draw_ellipse
 from Preprocessing.filtering import filtering, threshold
+from Preprocessing.exceptions import CircleNotFoundError
 
 
 def pupil_recognition(image, thresholdpupil=20):
@@ -21,12 +22,12 @@ def pupil_recognition(image, thresholdpupil=20):
 
     if circles is None:
         # TODO: Gestire il caso in cui non trova cerchi
-        pass
+        raise CircleNotFoundError('Nessun cerchio trovato nella pupilla')
     elif circles.shape[0:2] == (1, 1):
         return circles[0, 0]
     else:
         # TODO: Gestire il caso in cui trovo più cerchi
-        pass
+        return None
 
 
 def iris_recognition(image, thresholdiris=100):
@@ -48,12 +49,12 @@ def iris_recognition(image, thresholdiris=100):
 
     if circles is None:
         # TODO: Gestire il caso in cui non trova cerchi
-        pass
+        raise CircleNotFoundError('Nessun cerchio trovato nell\'iride')
     elif circles.shape[0:2] == (1, 1):
         return circles[0, 0]
     else:
         # TODO: Gestire il caso in cui trovo più cerchi
-        pass
+        return None
 
 
 def segmentation(image, iris_circle, pupil_circle, startangle, endangle):
@@ -89,14 +90,12 @@ def crop_image(masked_image, offset=30, tollerance=80):
 
 
 def daugman_normalizaiton(original_eye, circle, pupil_radius=0, startangle=0, endangle=45):
-    
-    
+
     start_angle = (360 - endangle) * np.pi / 180
     end_angle = (360 - startangle) * np.pi / 180
-    
+
     iris_coordinates = (circle[0], circle[1])
-    
-    
+
     x = int(iris_coordinates[0])
     y = int(iris_coordinates[1])
 
@@ -104,22 +103,25 @@ def daugman_normalizaiton(original_eye, circle, pupil_radius=0, startangle=0, en
     h = int(round(circle[2]) + 0)
 
     #cv2.circle(original_eye, iris_coordinates, int(circle[2]), (255,0,0), thickness=2)
-    iris_image = original_eye[y-h:y+h,x-w:x+w]
-    
-    
-    iris_image_to_show = cv2.resize(iris_image, (iris_image.shape[1]*2, iris_image.shape[0]*2))
+    iris_image = original_eye[y-h:y+h, x-w:x+w]
 
-    q = np.arange(start_angle, end_angle, 0.01) #theta
-    inn = np.arange(int(pupil_radius), int(iris_image_to_show.shape[0]/2), 1) #radius
+    iris_image_to_show = cv2.resize(
+        iris_image, (iris_image.shape[1]*2, iris_image.shape[0]*2))
 
-    cartisian_image = np.empty(shape = [inn.size, int(iris_image_to_show.shape[1])])
-    m = interp1d([np.pi*2, 0],[pupil_radius,iris_image_to_show.shape[1]])
+    q = np.arange(start_angle, end_angle, 0.01)  # theta
+    inn = np.arange(int(pupil_radius), int(
+        iris_image_to_show.shape[0]/2), 1)  # radius
+
+    cartisian_image = np.empty(
+        shape=[inn.size, int(iris_image_to_show.shape[1])])
+    m = interp1d([np.pi*2, 0], [pupil_radius, iris_image_to_show.shape[1]])
 
     for r in tqdm(inn):
         for t in tqdm(q):
             polarX = int((r * np.cos(t)) + iris_image_to_show.shape[1]/2)
             polarY = int((r * np.sin(t)) + iris_image_to_show.shape[0]/2)
-            cartisian_image[r][int(m(t) - 1)] = iris_image_to_show[polarY][polarX]
-    
-    cartisian_image = cartisian_image.astype('uint8')     
+            cartisian_image[r][int(
+                m(t) - 1)] = iris_image_to_show[polarY][polarX]
+
+    cartisian_image = cartisian_image.astype('uint8')
     return cartisian_image
