@@ -1,16 +1,18 @@
-import cv2
 import os
 import random
-import numpy as np
 import shutil
+
+import cv2
+import numpy as np
+
 
 def resize_img(im, imgsize=300):
     y, x, _ = im.shape
     if y < x:
-        new_y = int(y*0.1)
-        new_x = int((x - (y-2*new_y)) / 2)
-        #margin = int(x-new_x)
-        im = im[new_y:int((y - new_y)), new_x:int(x-new_x)]
+        new_y = int(y * 0.1)
+        new_x = int((x - (y - 2 * new_y)) / 2)
+        # margin = int(x-new_x)
+        im = im[new_y:int((y - new_y)), new_x:int(x - new_x)]
         im_r = cv2.resize(im, (imgsize, imgsize))
 
     else:
@@ -19,7 +21,7 @@ def resize_img(im, imgsize=300):
     return im_r
 
 
-def load_image(path, count=10, extention='jpg', resize=True):
+def load_image(path, extention='jpg', resize=True):
     images = []
     images_names = []
     for file in os.listdir(path):
@@ -42,7 +44,8 @@ def get_average_shape(cropped_dict):
 
 
 def resize_segments(cropped_array, resizeshape):
-    resized_segments = [cv2.resize(c, (resizeshape[1], resizeshape[0]), interpolation=cv2.INTER_AREA) for c in cropped_array]
+    resized_segments = [cv2.resize(c, (resizeshape[1], resizeshape[0]), interpolation=cv2.INTER_AREA) for c in
+                        cropped_array]
     return resized_segments
 
 
@@ -88,6 +91,18 @@ def check_folders(datadir):
         return False
 
 
+def crop_image(masked_image, offset=30, tollerance=80):
+    mask = masked_image > tollerance
 
+    # Coordinates of non-black pixels.
+    coords = np.argwhere(mask)
 
+    # Bounding box of non-black pixels.
+    x0, y0 = coords.min(axis=0)
+    x1, y1 = coords.max(axis=0) + 1  # slices are exclusive at the top
 
+    # Get the contents of the bounding box.
+    cropped = masked_image[x0 - offset: x1 + offset, y0 - offset: y1 + offset]
+    # print('Cropped Image Shape', cropped.shape)
+
+    return cropped

@@ -16,12 +16,7 @@ def filtering(img, invgray=False, sharpen=False, grayscale=True):
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
     blackhat = cv2.morphologyEx(cimg, cv2.MORPH_BLACKHAT, kernel)
     bottom_hat_filtered = cv2.add(blackhat, cimg)
-    # final_img = cv2.medianBlur(bottom_hat_filtered, 17)
-    # final_img = cv2.blur(bottom_hat_filtered, (3, 3))
-
     final_img = cv2.GaussianBlur(bottom_hat_filtered, (5, 5), 0)
-
-    #final_img = cv2.bilateralFilter(cimg, 9, 75, 75)
 
     if sharpen is True:
         # ---Sharpening filter----
@@ -63,7 +58,7 @@ def adjust_gamma(image, gamma=1.0):
     return cv2.LUT(image, table)
 
 
-def threshold(img, tValue=100, adaptive=False, binaryInv=False, otsu=False, dilate=False):
+def threshold(img, tValue, adaptive=False, binaryInv=False, otsu=False, dilate=False):
     if adaptive is False and otsu is False:
         _, thresh = cv2.threshold(img, tValue,
                                   255, cv2.THRESH_BINARY_INV if binaryInv else cv2.THRESH_BINARY)

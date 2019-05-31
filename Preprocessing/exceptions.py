@@ -4,12 +4,10 @@ class Error(Exception):
 
 
 class CircleNotFoundError(Error):
-    """Exception raised for errors in the input.
+    def __init__(self, message):
+        self.message = message
 
-    Attributes:
-        expression -- input expression in which the error occurred
-        message -- explanation of the error
-    """
 
+class ConfigurationFileNotFoundError(Error):
     def __init__(self, message):
         self.message = message
