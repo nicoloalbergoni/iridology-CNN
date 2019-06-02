@@ -12,7 +12,7 @@ from Preprocessing.utils import load_image, resize_segments, save_segments, chec
 def create_data(path):
     cropped_array = []
     skipped_count = 0
-    images = load_image(path, extention=config.UTILS.get('IMAGE_EXTENTION'), resize=config.UTILS.getboolean('RESIZE'))
+    images = load_image(path, extention=config.UTILS.get('IMAGE_EXTENTION'), resize=config.UTILS.getboolean('RESIZE'), resize_shape = config.UTILS.getint('RESIZE_SHAPE'))
     for img in tqdm(images):
         try:
             pupil_circle = pupil_recognition(img, thresholdpupil=config.PREPROCESSING.getint('THRESHOLD_PUPIL'))
