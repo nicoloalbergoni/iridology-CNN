@@ -6,21 +6,19 @@ import cv2
 import numpy as np
 
 
-def resize_img(im, imgsize=300):
+def resize_img(im, resize_shape):
     y, x, _ = im.shape
     if y < x:
-        new_y = int(y * 0.1)
-        new_x = int((x - (y - 2 * new_y)) / 2)
+        new_x = int((x - y) / 2)
         # margin = int(x-new_x)
-        im = im[new_y:int((y - new_y)), new_x:int(x - new_x)]
-        im_r = cv2.resize(im, (imgsize, imgsize))
+        im = im[0:int(y), new_x:int(x - new_x)]
+        im_r = cv2.resize(im, (resize_shape, resize_shape))
     else:
-        im_r = cv2.resize(im, (imgsize, imgsize))
-
+        im_r = cv2.resize(im, (resize_shape, resize_shape))
     return im_r
 
 
-def load_image(path, extention='jpg', resize=True):
+def load_image(path, extention='jpg', resize=False, resize_shape= 300):
     images = []
     images_names = []
     for file in os.listdir(path):
@@ -29,7 +27,7 @@ def load_image(path, extention='jpg', resize=True):
             images_names.append(title)
             im = cv2.imread(os.path.join(path, title))
 
-            im = resize_img(im) if resize else im
+            im = resize_img(im, resize_shape) if resize else im
 
             images.append(im)
     random.shuffle(images)
