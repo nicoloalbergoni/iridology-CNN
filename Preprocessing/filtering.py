@@ -40,8 +40,6 @@ def adjust_gamma(image, gamma=1.0):
     h, s, v = cv2.split(hsv)
     mean_v = v.mean()
 
-    print(mean_v)
-
     if mean_v > 165:
         gamma = 0.7
     elif mean_v < 155:
@@ -90,8 +88,6 @@ def increase_brightness(img, value=30):
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     h, s, v = cv2.split(hsv)
     mean_v = v.mean()
-
-    print(mean_v)
 
     if mean_v < 140:
         lim = 255 - value

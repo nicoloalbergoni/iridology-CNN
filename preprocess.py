@@ -1,6 +1,6 @@
 import os
 import traceback
-
+import configparser
 from tqdm import tqdm
 
 import Preprocessing.config as config
@@ -12,11 +12,11 @@ from Preprocessing.utils import load_image, resize_segments, save_segments, chec
 def create_data(path):
     cropped_array = []
     skipped_count = 0
-    images = load_image(path, extention=config.UTILS.get('IMAGE_EXTENTION'), resize=config.UTILS.getboolean('RESIZE'), resize_shape = config.UTILS.getint('RESIZE_SHAPE'))
+    images = load_image(path, extention=config.UTILS.get('IMAGE_EXTENTION'), resize=config.UTILS.getboolean('RESIZE'), resize_shape=config.UTILS.getint('RESIZE_SHAPE'))
     for img in tqdm(images):
         try:
-            pupil_circle = pupil_recognition(img, thresholdpupil=config.PREPROCESSING.getint('THRESHOLD_PUPIL'))
-            iris_circle = iris_recognition(img, thresholdiris=config.PREPROCESSING.getint('THRESHOLD_IRIS'))
+            pupil_circle = pupil_recognition(img, thresholdpupil=config.PREPROCESSING.getint('THRESHOLD_PUPIL'), incBright=config.FILTERING_PUPIL.getboolean('INCREASE_BRIGHTENESS'), adjGamma=config.FILTERING_PUPIL.getboolean('ADJUST_GAMMA'))
+            iris_circle = iris_recognition(img, thresholdiris=config.PREPROCESSING.getint('THRESHOLD_IRIS'), incBright=config.FILTERING_IRIS.getboolean('INCREASE_BRIGHTENESS'), adjGamma=config.FILTERING_IRIS.getboolean('ADJUST_GAMMA'))
 
             segmented_image, mask = segmentation(
                 img, iris_circle, pupil_circle, startangle=config.PREPROCESSING.getint('STARTANGLE'),
@@ -43,6 +43,10 @@ def create_data(path):
 def main():
     try:
         config.load_config_file('./config.ini')
+
+    except KeyError as e:
+        print('File di configurazione non corretto: manca la sezione', e)
+        return
     except Exception as e:
         traceback.print_exc()
         return

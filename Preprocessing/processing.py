@@ -6,14 +6,22 @@ from tqdm import tqdm
 import Preprocessing.config as config
 from Preprocessing.display import draw_ellipse
 from Preprocessing.exceptions import CircleNotFoundError
-from Preprocessing.filtering import filtering, threshold
+from Preprocessing.filtering import filtering, threshold, adjust_gamma, increase_brightness
 
 
-def pupil_recognition(image, thresholdpupil=70):
+def pupil_recognition(image, thresholdpupil=70, incBright=False, adjGamma=False):
     f_image = filtering(image, invgray=config.FILTERING_PUPIL.getboolean('INVERT_GRAYSCALE'),
                         grayscale=config.FILTERING_PUPIL.getboolean('GRAYSCALE'),
                         sharpen=config.FILTERING_PUPIL.getboolean('SHARPEN'))
-    # f_image = adjust_gamma(f_image, 2)
+
+    if incBright is True:
+        f_image = cv2.cvtColor(f_image, cv2.COLOR_GRAY2BGR)
+        f_image = increase_brightness(f_image, value=config.FILTERING_PUPIL.getint('BRIGHTNESS_VALUE'))
+        f_image = cv2.cvtColor(f_image, cv2.COLOR_BGR2GRAY)
+    if adjGamma is True:
+        f_image = cv2.cvtColor(f_image, cv2.COLOR_GRAY2BGR)
+        f_image = adjust_gamma(f_image, config.FILTERING_PUPIL.getfloat('GAMMA_VALUE'))
+        f_image = cv2.cvtColor(f_image, cv2.COLOR_BGR2GRAY)
 
     thresh = threshold(f_image, thresholdpupil,
                        adaptive=config.THRESHOLD_PUPIL.getboolean('ADAPTIVE'),
@@ -37,12 +45,20 @@ def pupil_recognition(image, thresholdpupil=70):
         return None
 
 
-def iris_recognition(image, thresholdiris=160):
-    # f_image = increase_brightness(image, value=50)
-    # f_image = adjust_gamma(image)
+def iris_recognition(image, thresholdiris=160, incBright=False, adjGamma=False):
     f_image = filtering(image, invgray=config.FILTERING_IRIS.getboolean('INVERT_GRAYSCALE'),
                         grayscale=config.FILTERING_IRIS.getboolean('GRAYSCALE'),
                         sharpen=config.FILTERING_IRIS.getboolean('SHARPEN'))
+
+    if incBright is True:
+        f_image = cv2.cvtColor(f_image, cv2.COLOR_GRAY2BGR)
+        f_image = increase_brightness(f_image, value=config.FILTERING_IRIS.getint('BRIGHTNESS_VALUE'))
+        f_image = cv2.cvtColor(f_image, cv2.COLOR_BGR2GRAY)
+    if adjGamma is True:
+        f_image = cv2.cvtColor(f_image, cv2.COLOR_GRAY2BGR)
+        f_image = adjust_gamma(f_image, config.FILTERING_IRIS.getfloat('GAMMA_VALUE'))
+        f_image = cv2.cvtColor(f_image, cv2.COLOR_BGR2GRAY)
+
     thresh = threshold(f_image, thresholdiris,
                        adaptive=config.THRESHOLD_IRIS.getboolean('ADAPTIVE'),
                        binaryInv=config.THRESHOLD_IRIS.getboolean('INVERTED_BINARY'),
