@@ -14,7 +14,6 @@ def resize_img(im, imgsize=300):
         # margin = int(x-new_x)
         im = im[new_y:int((y - new_y)), new_x:int(x - new_x)]
         im_r = cv2.resize(im, (imgsize, imgsize))
-
     else:
         im_r = cv2.resize(im, (imgsize, imgsize))
 
