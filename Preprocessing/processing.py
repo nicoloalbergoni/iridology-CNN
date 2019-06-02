@@ -98,6 +98,20 @@ def segmentation(image, iris_circle, pupil_circle, startangle, endangle):
 
     return masked_image, mask
 
+def segmentation(image, iris_circle, pupil_circle, startangle, endangle, min_radius, max_radius):
+    segmented = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    height, width = segmented.shape
+    outer_sector = np.zeros((height, width), np.uint8)
+    pupil_sector = np.zeros((height, width), np.uint8)
+    draw_ellipse(outer_sector, (iris_circle[0], iris_circle[1]), (
+        max_radius, max_radius), 0, -startangle, -endangle, 255, thickness=-1)
+    cv2.circle(pupil_sector, (pupil_circle[0], pupil_circle[1]), int(
+        min_radius), 255, thickness=-1)
+    mask = cv2.subtract(outer_sector, pupil_sector)
+    masked_image = cv2.bitwise_and(segmented, segmented, mask=mask)
+
+    return masked_image, mask
+
 
 def daugman_normalizaiton(original_eye, circle, pupil_radius=0, startangle=0, endangle=45):
     start_angle = (360 - endangle) * np.pi / 180
