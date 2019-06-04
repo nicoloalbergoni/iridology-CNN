@@ -11,13 +11,18 @@ def show_images(image):
 def draw_circles(real_image, pupil_circles, iris_circles):
     if pupil_circles is not None:
         pupil_circles = np.uint16(np.around(pupil_circles))
-        cv2.circle(real_image, (pupil_circles[0], pupil_circles[1]), pupil_circles[2], (255, 0, 0), 2)
-        cv2.circle(real_image, (pupil_circles[0], pupil_circles[1]), 2, (255, 255, 0), 3)
+        cv2.circle(
+            real_image, (pupil_circles[0], pupil_circles[1]), pupil_circles[2], (255, 0, 0), 2)
+        cv2.circle(
+            real_image, (pupil_circles[0], pupil_circles[1]), 2, (255, 255, 0), 3)
 
     if iris_circles is not None:
         iris_circles = np.uint16(np.around(iris_circles))
-        cv2.circle(real_image, (iris_circles[0], iris_circles[1]), iris_circles[2], (0, 255, 0), 2)
-        cv2.circle(real_image, (iris_circles[0], iris_circles[1]), 2, (0, 0, 255), 3)
+        cv2.circle(
+            real_image, (iris_circles[0], iris_circles[1]), iris_circles[2], (0, 255, 0), 2)
+        cv2.circle(
+            real_image, (iris_circles[0], iris_circles[1]), 2, (0, 0, 255), 3)
+
 
 def draw_ellipse(
         img, center, axes, angle,
@@ -37,4 +42,3 @@ def draw_ellipse(
         img, center, axes, angle,
         startAngle, endAngle, color,
         thickness, lineType, shift)
-

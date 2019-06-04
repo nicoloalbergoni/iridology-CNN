@@ -70,6 +70,7 @@ def main():
 
     average_shape = get_average_shape(cropped_dict)
 
+    print('Resizing and saving segments...')
     for category in tqdm(CATEGORIES):
         resized_segments = resize_segments(
             cropped_dict[category], average_shape)
