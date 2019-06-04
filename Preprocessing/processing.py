@@ -2,11 +2,13 @@ import cv2
 import numpy as np
 from scipy.interpolate import interp1d
 from tqdm import tqdm
+import traceback
 
 import Preprocessing.config as config
 from Preprocessing.display import draw_ellipse
-from Preprocessing.exceptions import CircleNotFoundError
+from Preprocessing.exceptions import CircleNotFoundError, WrongRadius
 from Preprocessing.filtering import filtering, threshold, adjust_gamma, increase_brightness
+from Preprocessing import exceptions
 
 
 def pupil_recognition(image, thresholdpupil=70, incBright=False, adjGamma=False):
@@ -95,34 +97,56 @@ def iris_recognition(image, thresholdiris=160, incBright=False, adjGamma=False):
         return None
 
 
-def segmentation(image, iris_circle, pupil_circle, startangle, endangle):
+def segmentation(image, iris_circle, pupil_circle, startangle, endangle, min_radius, max_radius):
+    skipped_count = 0
     segmented = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     height, width = segmented.shape
     outer_sector = np.zeros((height, width), np.uint8)
     pupil_sector = np.zeros((height, width), np.uint8)
-    draw_ellipse(outer_sector, (iris_circle[0], iris_circle[1]), (
-        iris_circle[2], iris_circle[2]), 0, -startangle, -endangle, 255, thickness=-1)
-    cv2.circle(pupil_sector, (pupil_circle[0], pupil_circle[1]), int(
-        pupil_circle[2]), 255, thickness=-1)
+
+    if min_radius>=100:
+        min_radius = pupil_circle[2]
+    else:
+        min_radius = 0.01 * min_radius * iris_circle[2]
+    if max_radius>100:
+        max_radius = 100
+    max_radius = 0.01 * max_radius * iris_circle[2]
+    try:
+
+        if min_radius<max_radius and min_radius>=pupil_circle[2]:
+            draw_ellipse(outer_sector, (iris_circle[0], iris_circle[1]), (
+                max_radius, max_radius), 0, -startangle, -endangle, 255, thickness=-1)
+            cv2.circle(pupil_sector, (pupil_circle[0], pupil_circle[1]), int(
+                min_radius), 255, thickness=-1)
+        # elif min_radius<max_radius and min_radius*iris_circle[2]>=pupil_circle[2] and max_radius*iris_circle[2]<=iris_circle[2]:
+        #     draw_ellipse(outer_sector, (iris_circle[0], iris_circle[1]), (
+        #         max_radius, max_radius), 0, -startangle, -endangle, 255, thickness=-1)
+        #     cv2.circle(pupil_sector, (pupil_circle[0], pupil_circle[1]), int(
+        #         min_radius*iris_circle[2]), 255, thickness=-1)
+    except Exception:
+        skipped_count += 1
+        traceback.print_exc()
+
+
     mask = cv2.subtract(outer_sector, pupil_sector)
     masked_image = cv2.bitwise_and(segmented, segmented, mask=mask)
 
     return masked_image, mask
 
 
-def partial_segmentation(image, iris_circle, pupil_circle, startangle, endangle, min_radius, max_radius):
-    segmented = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    height, width = segmented.shape
-    outer_sector = np.zeros((height, width), np.uint8)
-    pupil_sector = np.zeros((height, width), np.uint8)
-    draw_ellipse(outer_sector, (iris_circle[0], iris_circle[1]), (
-        max_radius, max_radius), 0, -startangle, -endangle, 255, thickness=-1)
-    cv2.circle(pupil_sector, (pupil_circle[0], pupil_circle[1]), int(
-        min_radius), 255, thickness=-1)
-    mask = cv2.subtract(outer_sector, pupil_sector)
-    masked_image = cv2.bitwise_and(segmented, segmented, mask=mask)
-
-    return masked_image, mask
+# def partial_segmentation(image, iris_circle, pupil_circle, startangle, endangle, min_radius, max_radius):
+#     segmented = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+#     height, width = segmented.shape
+#     outer_sector = np.zeros((height, width), np.uint8)
+#     pupil_sector = np.zeros((height, width), np.uint8)
+#     draw_ellipse(outer_sector, (iris_circle[0], iris_circle[1]), (
+#         max_radius, max_radius), 0, -startangle, -endangle, 255, thickness=-1)
+#     cv2.circle(pupil_sector, (pupil_circle[0], pupil_circle[1]), int(
+#         min_radius), 255, thickness=-1)
+#     mask = cv2.subtract(outer_sector, pupil_sector)
+#     masked_image = cv2.bitwise_and(segmented, segmented, mask=mask)
+#
+#     return masked_image, mask
 
 
 def daugman_normalizaiton(original_eye, circle, pupil_radius=0, startangle=0, endangle=45):

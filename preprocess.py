@@ -24,7 +24,7 @@ def create_data(path):
             segmented_image, mask = segmentation(
                 img, iris_circle, pupil_circle, startangle=config.PREPROCESSING.getint(
                     'STARTANGLE'),
-                endangle=config.PREPROCESSING.getint('ENDANGLE'))
+                endangle=config.PREPROCESSING.getint('ENDANGLE'), min_radius=config.PREPROCESSING.getint('MIN_RADIUS'), max_radius=config.PREPROCESSING.getint('MAX_RADIUS'))
             # cv2.imshow('Segmented image', segmented_image)
 
             cropped_image = crop_image(
@@ -37,7 +37,7 @@ def create_data(path):
             # show_images(img)
         except Exception:
             skipped_count += 1
-            traceback.print_exc()
+            #traceback.print_exc()
             continue
 
     print('\n')

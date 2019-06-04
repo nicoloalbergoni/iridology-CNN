@@ -11,3 +11,7 @@ class CircleNotFoundError(Error):
 class ConfigurationFileNotFoundError(Error):
     def __init__(self, message):
         self.message = message
+
+class WrongRadius(Error):
+    def __init__(self, message):
+        self.message = message
