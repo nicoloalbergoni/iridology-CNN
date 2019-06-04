@@ -98,39 +98,28 @@ def iris_recognition(image, thresholdiris=160, incBright=False, adjGamma=False):
 
 
 def segmentation(image, iris_circle, pupil_circle, startangle, endangle, min_radius, max_radius):
-    skipped_count = 0
     segmented = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     height, width = segmented.shape
     outer_sector = np.zeros((height, width), np.uint8)
     pupil_sector = np.zeros((height, width), np.uint8)
 
-    if min_radius>=100:
+    if min_radius>=100 or min_radius<=0:
         min_radius = pupil_circle[2]
     else:
         min_radius = 0.01 * min_radius * iris_circle[2]
-    if max_radius>100:
+    if max_radius>100 or max_radius<=0:
         max_radius = 100
     max_radius = 0.01 * max_radius * iris_circle[2]
-    try:
+    if min_radius<pupil_circle[2]:
+        min_radius = pupil_circle[2]
 
-        if min_radius<max_radius and min_radius>=pupil_circle[2]:
-            draw_ellipse(outer_sector, (iris_circle[0], iris_circle[1]), (
-                max_radius, max_radius), 0, -startangle, -endangle, 255, thickness=-1)
-            cv2.circle(pupil_sector, (pupil_circle[0], pupil_circle[1]), int(
-                min_radius), 255, thickness=-1)
-        # elif min_radius<max_radius and min_radius*iris_circle[2]>=pupil_circle[2] and max_radius*iris_circle[2]<=iris_circle[2]:
-        #     draw_ellipse(outer_sector, (iris_circle[0], iris_circle[1]), (
-        #         max_radius, max_radius), 0, -startangle, -endangle, 255, thickness=-1)
-        #     cv2.circle(pupil_sector, (pupil_circle[0], pupil_circle[1]), int(
-        #         min_radius*iris_circle[2]), 255, thickness=-1)
-    except Exception:
-        skipped_count += 1
-        traceback.print_exc()
-
-
+    if min_radius<max_radius:
+        draw_ellipse(outer_sector, (iris_circle[0], iris_circle[1]), (
+            max_radius, max_radius), 0, -startangle, -endangle, 255, thickness=-1)
+        cv2.circle(pupil_sector, (pupil_circle[0], pupil_circle[1]), int(
+            min_radius), 255, thickness=-1)
     mask = cv2.subtract(outer_sector, pupil_sector)
     masked_image = cv2.bitwise_and(segmented, segmented, mask=mask)
-
     return masked_image, mask
 
 
