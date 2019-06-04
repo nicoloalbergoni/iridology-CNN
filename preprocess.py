@@ -5,15 +5,20 @@ from tqdm import tqdm
 
 import Preprocessing.config as config
 from Preprocessing.display import draw_circles
+from Preprocessing.exceptions import ConfigurationFileNotFoundError, CannotLoadImagesError, CircleNotFoundError
 from Preprocessing.processing import pupil_recognition, iris_recognition, segmentation
 from Preprocessing.utils import load_image, resize_segments, save_segments, check_folders, get_average_shape, crop_image
 
 
 def create_data(path):
     cropped_array = []
-    skipped_count = 0
+    circle_skipped_count = 0
+    other_skipped_count = 0
     images = load_image(path, extention=config.UTILS.get('IMAGE_EXTENTION'), resize=config.UTILS.getboolean(
         'RESIZE'), resize_shape=config.UTILS.getint('RESIZE_SHAPE'))
+    if images is None or len(images) == 0:
+        raise CannotLoadImagesError('Non è stato possibile caricare il set di immagini')
+
     for img in tqdm(images):
         try:
             pupil_circle = pupil_recognition(img, thresholdpupil=config.PREPROCESSING.getint('THRESHOLD_PUPIL'), incBright=config.FILTERING_PUPIL.getboolean(
@@ -35,22 +40,31 @@ def create_data(path):
 
             draw_circles(img, pupil_circle, iris_circle)
             # show_images(img)
+        except CircleNotFoundError:
+            circle_skipped_count += 1
+            continue
         except Exception:
-            skipped_count += 1
+            other_skipped_count += 1
             traceback.print_exc()
             continue
 
     print('\n')
-    print('Skipped', skipped_count, 'images')
+    print('Skipped', circle_skipped_count, 'images')
+    print('Skipped', other_skipped_count, 'images for other problems')
     return cropped_array
 
 
 def main():
     try:
         config.load_config_file('./config.ini')
-
     except KeyError as e:
         print('File di configurazione non corretto: manca la sezione', e)
+        return
+    except ConfigurationFileNotFoundError as e:
+        print(e)
+        return
+    except configparser.ParsingError as e:
+        print(e)
         return
     except Exception as e:
         traceback.print_exc()
@@ -66,10 +80,15 @@ def main():
 
     for category in tqdm(CATEGORIES):
         data_path = os.path.join(DATADIR, category)
-        cropped_dict[category] = create_data(data_path)
+        try:
+            cropped_dict[category] = create_data(data_path)
+        except CannotLoadImagesError as e:
+            print(e)
+            return
 
     average_shape = get_average_shape(cropped_dict)
 
+    print('\n')
     print('Resizing and saving segments...')
     for category in tqdm(CATEGORIES):
         resized_segments = resize_segments(

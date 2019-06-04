@@ -11,3 +11,8 @@ class CircleNotFoundError(Error):
 class ConfigurationFileNotFoundError(Error):
     def __init__(self, message):
         self.message = message
+
+
+class CannotLoadImagesError(Error):
+    def __init__(self, message):
+        self.message = message

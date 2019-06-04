@@ -21,15 +21,20 @@ def resize_img(im, resize_shape):
 def load_image(path, extention='jpg', resize=False, resize_shape=300):
     images = []
     images_names = []
+    load_fail_count = 0
     for file in os.listdir(path):
         title = file.title().lower()
         if title.split('.')[-1] == extention:
             images_names.append(title)
             im = cv2.imread(os.path.join(path, title))
-
+            if im is None:
+                load_fail_count += 1
+                continue
             im = resize_img(im, resize_shape) if resize else im
 
             images.append(im)
+    if load_fail_count != 0:
+        print('Could not load', load_fail_count, 'images')
     random.shuffle(images)
     return images
 
