@@ -103,14 +103,14 @@ def segmentation(image, iris_circle, pupil_circle, startangle, endangle, min_rad
     outer_sector = np.zeros((height, width), np.uint8)
     pupil_sector = np.zeros((height, width), np.uint8)
 
-    if min_radius>=100 or min_radius<=0:
+    if min_radius >= 100 or min_radius <= 0:
         min_radius = pupil_circle[2]
     else:
         min_radius = 0.01 * min_radius * iris_circle[2]
-    if max_radius>100 or max_radius<=0:
+    if max_radius > 100 or max_radius <= 0:
         max_radius = 100
     max_radius = 0.01 * max_radius * iris_circle[2]
-    if min_radius<pupil_circle[2]:
+    if min_radius < pupil_circle[2]:
         min_radius = pupil_circle[2]
 
     if min_radius<max_radius:
@@ -121,7 +121,6 @@ def segmentation(image, iris_circle, pupil_circle, startangle, endangle, min_rad
     mask = cv2.subtract(outer_sector, pupil_sector)
     masked_image = cv2.bitwise_and(segmented, segmented, mask=mask)
     return masked_image, mask
-
 
 
 def daugman_normalizaiton(original_eye, circle, pupil_radius=0, startangle=0, endangle=45):
