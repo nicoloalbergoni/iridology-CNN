@@ -5,10 +5,17 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug",
+      "name": "Preprocess-Debug",
       "type": "python",
       "request": "launch",
       "program": "C:\\Users\\Albe\\Desktop\\tesi-triennale\\preprocess.py",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Train-Debug",
+      "type": "python",
+      "request": "launch",
+      "program": "C:\\Users\\Albe\\Desktop\\tesi-triennale\\train.py",
       "console": "integratedTerminal"
     }
   ]

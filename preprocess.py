@@ -12,14 +12,18 @@ from Preprocessing.utils import load_image, resize_segments, save_segments, chec
 def create_data(path):
     cropped_array = []
     skipped_count = 0
-    images = load_image(path, extention=config.UTILS.get('IMAGE_EXTENTION'), resize=config.UTILS.getboolean('RESIZE'), resize_shape=config.UTILS.getint('RESIZE_SHAPE'))
+    images = load_image(path, extention=config.UTILS.get('IMAGE_EXTENTION'), resize=config.UTILS.getboolean(
+        'RESIZE'), resize_shape=config.UTILS.getint('RESIZE_SHAPE'))
     for img in tqdm(images):
         try:
-            pupil_circle = pupil_recognition(img, thresholdpupil=config.PREPROCESSING.getint('THRESHOLD_PUPIL'), incBright=config.FILTERING_PUPIL.getboolean('INCREASE_BRIGHTENESS'), adjGamma=config.FILTERING_PUPIL.getboolean('ADJUST_GAMMA'))
-            iris_circle = iris_recognition(img, thresholdiris=config.PREPROCESSING.getint('THRESHOLD_IRIS'), incBright=config.FILTERING_IRIS.getboolean('INCREASE_BRIGHTENESS'), adjGamma=config.FILTERING_IRIS.getboolean('ADJUST_GAMMA'))
+            pupil_circle = pupil_recognition(img, thresholdpupil=config.PREPROCESSING.getint('THRESHOLD_PUPIL'), incBright=config.FILTERING_PUPIL.getboolean(
+                'INCREASE_BRIGHTENESS'), adjGamma=config.FILTERING_PUPIL.getboolean('ADJUST_GAMMA'))
+            iris_circle = iris_recognition(img, thresholdiris=config.PREPROCESSING.getint('THRESHOLD_IRIS'), incBright=config.FILTERING_IRIS.getboolean(
+                'INCREASE_BRIGHTENESS'), adjGamma=config.FILTERING_IRIS.getboolean('ADJUST_GAMMA'))
 
             segmented_image, mask = segmentation(
-                img, iris_circle, pupil_circle, startangle=config.PREPROCESSING.getint('STARTANGLE'),
+                img, iris_circle, pupil_circle, startangle=config.PREPROCESSING.getint(
+                    'STARTANGLE'),
                 endangle=config.PREPROCESSING.getint('ENDANGLE'))
             # cv2.imshow('Segmented image', segmented_image)
 
@@ -33,6 +37,7 @@ def create_data(path):
             # show_images(img)
         except Exception:
             skipped_count += 1
+            traceback.print_exc()
             continue
 
     print('\n')

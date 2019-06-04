@@ -11,25 +11,30 @@ from Preprocessing.filtering import filtering, threshold, adjust_gamma, increase
 
 def pupil_recognition(image, thresholdpupil=70, incBright=False, adjGamma=False):
     f_image = filtering(image, invgray=config.FILTERING_PUPIL.getboolean('INVERT_GRAYSCALE'),
-                        grayscale=config.FILTERING_PUPIL.getboolean('GRAYSCALE'),
+                        grayscale=config.FILTERING_PUPIL.getboolean(
+                            'GRAYSCALE'),
                         sharpen=config.FILTERING_PUPIL.getboolean('SHARPEN'))
 
     if incBright is True:
         f_image = cv2.cvtColor(f_image, cv2.COLOR_GRAY2BGR)
-        f_image = increase_brightness(f_image, value=config.FILTERING_PUPIL.getint('BRIGHTNESS_VALUE'))
+        f_image = increase_brightness(
+            f_image, value=config.FILTERING_PUPIL.getint('BRIGHTNESS_VALUE'))
         f_image = cv2.cvtColor(f_image, cv2.COLOR_BGR2GRAY)
     if adjGamma is True:
         f_image = cv2.cvtColor(f_image, cv2.COLOR_GRAY2BGR)
-        f_image = adjust_gamma(f_image, config.FILTERING_PUPIL.getfloat('GAMMA_VALUE'))
+        f_image = adjust_gamma(
+            f_image, config.FILTERING_PUPIL.getfloat('GAMMA_VALUE'))
         f_image = cv2.cvtColor(f_image, cv2.COLOR_BGR2GRAY)
 
     thresh = threshold(f_image, thresholdpupil,
                        adaptive=config.THRESHOLD_PUPIL.getboolean('ADAPTIVE'),
-                       binaryInv=config.THRESHOLD_PUPIL.getboolean('INVERTED_BINARY'),
+                       binaryInv=config.THRESHOLD_PUPIL.getboolean(
+                           'INVERTED_BINARY'),
                        otsu=config.THRESHOLD_PUPIL.getboolean('OTSU'),
                        dilate=config.THRESHOLD_PUPIL.getboolean('DILATE'))
     circles = cv2.HoughCircles(
-        thresh, cv2.HOUGH_GRADIENT, config.HOUGH_PUPIL.getfloat('INVERSE_RATIO'), image.shape[0],
+        thresh, cv2.HOUGH_GRADIENT, config.HOUGH_PUPIL.getfloat(
+            'INVERSE_RATIO'), image.shape[0],
         param1=config.HOUGH_PUPIL.getint('PARAM1'), param2=config.HOUGH_PUPIL.getint('PARAM2'),
         minRadius=config.HOUGH_PUPIL.getint('MIN_RADIUS'), maxRadius=config.HOUGH_PUPIL.getint('MAX_RADIUS'))
 
@@ -47,26 +52,32 @@ def pupil_recognition(image, thresholdpupil=70, incBright=False, adjGamma=False)
 
 def iris_recognition(image, thresholdiris=160, incBright=False, adjGamma=False):
     f_image = filtering(image, invgray=config.FILTERING_IRIS.getboolean('INVERT_GRAYSCALE'),
-                        grayscale=config.FILTERING_IRIS.getboolean('GRAYSCALE'),
+                        grayscale=config.FILTERING_IRIS.getboolean(
+                            'GRAYSCALE'),
                         sharpen=config.FILTERING_IRIS.getboolean('SHARPEN'))
 
     if incBright is True:
         f_image = cv2.cvtColor(f_image, cv2.COLOR_GRAY2BGR)
-        f_image = increase_brightness(f_image, value=config.FILTERING_IRIS.getint('BRIGHTNESS_VALUE'))
+        f_image = increase_brightness(
+            f_image, value=config.FILTERING_IRIS.getint('BRIGHTNESS_VALUE'))
         f_image = cv2.cvtColor(f_image, cv2.COLOR_BGR2GRAY)
     if adjGamma is True:
         f_image = cv2.cvtColor(f_image, cv2.COLOR_GRAY2BGR)
-        f_image = adjust_gamma(f_image, config.FILTERING_IRIS.getfloat('GAMMA_VALUE'))
+        f_image = adjust_gamma(
+            f_image, config.FILTERING_IRIS.getfloat('GAMMA_VALUE'))
         f_image = cv2.cvtColor(f_image, cv2.COLOR_BGR2GRAY)
 
     thresh = threshold(f_image, thresholdiris,
                        adaptive=config.THRESHOLD_IRIS.getboolean('ADAPTIVE'),
-                       binaryInv=config.THRESHOLD_IRIS.getboolean('INVERTED_BINARY'),
+                       binaryInv=config.THRESHOLD_IRIS.getboolean(
+                           'INVERTED_BINARY'),
                        otsu=config.THRESHOLD_IRIS.getboolean('OTSU'), dilate=config.THRESHOLD_IRIS.getboolean('DILATE'))
 
-    canny = cv2.Canny(thresh, config.HOUGH_IRIS.getint('CANNY_TH1'), config.HOUGH_IRIS.getint('CANNY_TH2'))
+    canny = cv2.Canny(thresh, config.HOUGH_IRIS.getint(
+        'CANNY_TH1'), config.HOUGH_IRIS.getint('CANNY_TH2'))
     circles = cv2.HoughCircles(
-        canny, cv2.HOUGH_GRADIENT, config.HOUGH_IRIS.getfloat('INVERSE_RATIO'), image.shape[0],
+        canny, cv2.HOUGH_GRADIENT, config.HOUGH_IRIS.getfloat(
+            'INVERSE_RATIO'), image.shape[0],
         param1=config.HOUGH_IRIS.getint('PARAM1'), param2=config.HOUGH_IRIS.getint('PARAM2'),
         minRadius=config.HOUGH_IRIS.getint('MIN_RADIUS'), maxRadius=config.HOUGH_IRIS.getint('MAX_RADIUS'))
 
@@ -98,7 +109,8 @@ def segmentation(image, iris_circle, pupil_circle, startangle, endangle):
 
     return masked_image, mask
 
-def segmentation(image, iris_circle, pupil_circle, startangle, endangle, min_radius, max_radius):
+
+def partial_segmentation(image, iris_circle, pupil_circle, startangle, endangle, min_radius, max_radius):
     segmented = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     height, width = segmented.shape
     outer_sector = np.zeros((height, width), np.uint8)

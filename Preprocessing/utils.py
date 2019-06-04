@@ -18,7 +18,7 @@ def resize_img(im, resize_shape):
     return im_r
 
 
-def load_image(path, extention='jpg', resize=False, resize_shape= 300):
+def load_image(path, extention='jpg', resize=False, resize_shape=300):
     images = []
     images_names = []
     for file in os.listdir(path):
