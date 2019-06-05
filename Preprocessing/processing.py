@@ -2,13 +2,11 @@ import cv2
 import numpy as np
 from scipy.interpolate import interp1d
 from tqdm import tqdm
-import traceback
 
 import Preprocessing.config as config
 from Preprocessing.display import draw_ellipse
-from Preprocessing.exceptions import CircleNotFoundError
+from Preprocessing.exceptions import CircleNotFoundError, MultipleCirclesFoundError
 from Preprocessing.filtering import filtering, threshold, adjust_gamma, increase_brightness
-from Preprocessing import exceptions
 
 
 def pupil_recognition(image, thresholdpupil=70, incBright=False, adjGamma=False):
@@ -40,7 +38,7 @@ def pupil_recognition(image, thresholdpupil=70, incBright=False, adjGamma=False)
         param1=config.HOUGH_PUPIL.getint('PARAM1'), param2=config.HOUGH_PUPIL.getint('PARAM2'),
         minRadius=config.HOUGH_PUPIL.getint('MIN_RADIUS'), maxRadius=config.HOUGH_PUPIL.getint('MAX_RADIUS'))
 
-    #cv2.imshow('Pupil Threshold', thresh)
+    # cv2.imshow('Pupil Threshold', thresh)
 
     if circles is None:
         # TODO: Gestire il caso in cui non trova cerchi
@@ -49,7 +47,8 @@ def pupil_recognition(image, thresholdpupil=70, incBright=False, adjGamma=False)
         return circles[0, 0]
     else:
         # TODO: Gestire il caso in cui trovo più cerchi
-        return None
+        raise MultipleCirclesFoundError('E\' stato rilevato più di un cerchio')
+
 
 
 def iris_recognition(image, thresholdiris=160, incBright=False, adjGamma=False):
@@ -94,7 +93,7 @@ def iris_recognition(image, thresholdiris=160, incBright=False, adjGamma=False):
         return circles[0, 0]
     else:
         # TODO: Gestire il caso in cui trovo più cerchi
-        return None
+        raise MultipleCirclesFoundError('E\' stato rilevato più di un cerchio')
 
 
 def segmentation(image, iris_circle, pupil_circle, startangle, endangle, min_radius, max_radius):
@@ -113,7 +112,7 @@ def segmentation(image, iris_circle, pupil_circle, startangle, endangle, min_rad
     if min_radius < pupil_circle[2]:
         min_radius = pupil_circle[2]
 
-    if min_radius<max_radius:
+    if min_radius < max_radius:
         draw_ellipse(outer_sector, (iris_circle[0], iris_circle[1]), (
             max_radius, max_radius), 0, -startangle, -endangle, 255, thickness=-1)
         cv2.circle(pupil_sector, (pupil_circle[0], pupil_circle[1]), int(

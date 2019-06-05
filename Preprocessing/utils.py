@@ -21,6 +21,7 @@ def resize_img(im, resize_shape):
 def load_image(path, extention='jpg', resize=False, resize_shape=300):
     images = []
     images_names = []
+    titles = []
     load_fail_count = 0
     for file in os.listdir(path):
         title = file.title().lower()
@@ -30,6 +31,8 @@ def load_image(path, extention='jpg', resize=False, resize_shape=300):
             if im is None:
                 load_fail_count += 1
                 continue
+
+            titles.append(title)
             im = resize_img(im, resize_shape) if resize else im
 
             images.append(im)
@@ -37,7 +40,7 @@ def load_image(path, extention='jpg', resize=False, resize_shape=300):
         print('Could not load', load_fail_count, 'images')
     # TODO: Vedere se il shuffle in load image è necessario
     #random.shuffle(images)
-    return images
+    return images, titles
 
 
 def get_average_shape(cropped_dict):

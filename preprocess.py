@@ -5,7 +5,7 @@ from tqdm import tqdm
 
 import Preprocessing.config as config
 from Preprocessing.display import draw_circles
-from Preprocessing.exceptions import ConfigurationFileNotFoundError, CannotLoadImagesError, CircleNotFoundError
+from Preprocessing.exceptions import ConfigurationFileNotFoundError, CannotLoadImagesError, CircleNotFoundError, MultipleCirclesFoundError
 from Preprocessing.processing import pupil_recognition, iris_recognition, segmentation
 from Preprocessing.utils import load_image, resize_segments, save_segments, check_folders, get_average_shape, crop_image
 
@@ -13,13 +13,15 @@ from Preprocessing.utils import load_image, resize_segments, save_segments, chec
 def create_data(path):
     cropped_array = []
     circle_skipped_count = 0
+    multiple_circle_skipped_count = 0
     other_skipped_count = 0
-    images = load_image(path, extention=config.UTILS.get('IMAGE_EXTENTION'), resize=config.UTILS.getboolean(
+    images, titles = load_image(path, extention=config.UTILS.get('IMAGE_EXTENTION'), resize=config.UTILS.getboolean(
         'RESIZE'), resize_shape=config.UTILS.getint('RESIZE_SHAPE'))
     if images is None or len(images) == 0:
         raise CannotLoadImagesError('Non è stato possibile caricare il set di immagini')
 
-    for img in tqdm(images):
+    final_titles = []
+    for img, title in tqdm(zip(images, titles), total=len(images)):
         try:
             pupil_circle = pupil_recognition(img, thresholdpupil=config.PREPROCESSING.getint('THRESHOLD_PUPIL'), incBright=config.FILTERING_PUPIL.getboolean(
                 'INCREASE_BRIGHTENESS'), adjGamma=config.FILTERING_PUPIL.getboolean('ADJUST_GAMMA'))
@@ -35,13 +37,18 @@ def create_data(path):
             cropped_image = crop_image(
                 segmented_image, offset=config.UTILS.getint('CROP_OFFSET'),
                 tollerance=config.UTILS.getint('CROP_TOLLERANCE'))
-            cropped_array.append(cropped_image)
-            # cv2.imshow('Cropped image', cropped_image)
 
             draw_circles(img, pupil_circle, iris_circle)
+
+            cropped_array.append(cropped_image)
+            final_titles.append(title)
+            # cv2.imshow('Cropped image', cropped_image)
             # show_images(img)
         except CircleNotFoundError:
             circle_skipped_count += 1
+            continue
+        except MultipleCirclesFoundError:
+            multiple_circle_skipped_count += 1
             continue
         except Exception:
             other_skipped_count += 1
@@ -50,8 +57,9 @@ def create_data(path):
 
     print('\n')
     print('Skipped', circle_skipped_count, 'images')
+    print('Skipped', multiple_circle_skipped_count, 'images, multiple circles were found')
     print('Skipped', other_skipped_count, 'images for other problems')
-    return cropped_array
+    return cropped_array, final_titles
 
 
 def main():
@@ -81,7 +89,7 @@ def main():
     for category in tqdm(CATEGORIES):
         data_path = os.path.join(DATADIR, category)
         try:
-            cropped_dict[category] = create_data(data_path)
+            cropped_dict[category], _ = create_data(data_path)
         except CannotLoadImagesError as e:
             print(e)
             return

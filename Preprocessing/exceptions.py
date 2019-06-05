@@ -16,3 +16,8 @@ class ConfigurationFileNotFoundError(Error):
 class CannotLoadImagesError(Error):
     def __init__(self, message):
         self.message = message
+
+
+class MultipleCirclesFoundError(Error):
+    def __init__(self, message):
+        self.message = message

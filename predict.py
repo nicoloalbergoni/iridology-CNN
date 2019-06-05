@@ -70,7 +70,7 @@ def main():
             titles.append(title)
 
     try:
-        cropped_images = create_data(os.path.join(PARENT_DIR, DATADIR))
+        cropped_images, titles = create_data(os.path.join(PARENT_DIR, DATADIR))
     except CannotLoadImagesError as e:
         print(e)
         return
@@ -86,12 +86,16 @@ def main():
     #     cv2.imwrite('./TEMP_PREDICTION_SEGMENT/' + str(random.randint(1, 100)) + '.jpg', i)
     #     cv2.imshow('d', i)
     #     cv2.waitKey(0)
+    try:
+        predictions = model.predict(resized_segments)
+    except Exception as e:
+        traceback.print_exc()
+        return
 
-    predictions = model.predict(resized_segments)
     CATEGORIES = ['PROBS', 'NORMAL']
 
-    for prediction in predictions[0:]:
-        print(CATEGORIES[int(prediction[0])])
+    for prediction, title in zip(predictions[0:], titles):
+        print(f'Image {title}, prediction:', CATEGORIES[int(prediction[0])])
 
 
 if __name__ == '__main__':

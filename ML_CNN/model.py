@@ -1,5 +1,6 @@
 import tensorflow as tf
 import os
+import time
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Activation, Flatten
 from tensorflow.keras.layers import Conv2D, MaxPooling2D
@@ -37,7 +38,7 @@ def train_model(model, X, y, batch_size=32, epochs=3, validation_split=0.3):
     model.fit(X, y, batch_size=batch_size, epochs=epochs, validation_split=validation_split)
     if not os.path.exists(MODELDIR):
         os.makedirs(MODELDIR)
-    NAME = f'model-{model.input_shape}-.model'
+    NAME = f'model-{int(time.time())}-{model.input_shape}.model'
     model.save(os.path.join(MODELDIR, NAME))
 
 
