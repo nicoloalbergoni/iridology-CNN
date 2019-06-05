@@ -35,7 +35,8 @@ def load_image(path, extention='jpg', resize=False, resize_shape=300):
             images.append(im)
     if load_fail_count != 0:
         print('Could not load', load_fail_count, 'images')
-    random.shuffle(images)
+    # TODO: Vedere se il shuffle in load image è necessario
+    #random.shuffle(images)
     return images
 
 
