@@ -50,7 +50,6 @@ def pupil_recognition(image, thresholdpupil=70, incBright=False, adjGamma=False)
         raise MultipleCirclesFoundError('E\' stato rilevato più di un cerchio')
 
 
-
 def iris_recognition(image, thresholdiris=160, incBright=False, adjGamma=False):
     f_image = filtering(image, invgray=config.FILTERING_IRIS.getboolean('INVERT_GRAYSCALE'),
                         grayscale=config.FILTERING_IRIS.getboolean(
