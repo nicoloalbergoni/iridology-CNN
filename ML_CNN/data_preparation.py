@@ -1,14 +1,18 @@
 import os
 import cv2
 import random
+import pickle
+import numpy as np
 from tqdm import tqdm
 
 
-def create_training_data():
+def create_training_data(savedata=False):
 
     SEGMENTDIR = "./TEMP_SEG"
     CATEGORIES = ['DB_NORMAL_SEG', 'DB_PROBS_SEG']
     training_data = []
+    X = []
+    y = []
 
     for category in CATEGORIES:
         path = os.path.join(SEGMENTDIR, category)
@@ -23,4 +27,27 @@ def create_training_data():
                 pass
 
     random.shuffle(training_data)
-    return training_data
+    # TODO: Aggiungere controlli in caso di training_data empty
+
+    for features, label in training_data:
+        X.append(features)
+        y.append(label)
+
+    X = np.array(X)
+    X = X.reshape(-1, X.shape[1], X.shape[2], 1)
+
+    if savedata is True:
+        SAVEDIR = './TRAIN_DATA_DUMP'
+
+        if not os.path.exists(SAVEDIR):
+            os.makedirs(SAVEDIR)
+
+        pickle_out = open(os.path.join(SAVEDIR, "X.pickle"), "wb")
+        pickle.dump(X, pickle_out)
+        pickle_out.close()
+
+        pickle_out = open(os.path.join(SAVEDIR, "y.pickle"), "wb")
+        pickle.dump(y, pickle_out)
+        pickle_out.close()
+
+    return X, y

@@ -28,17 +28,7 @@ def main():
         raise Exception(
             'Non sono presenti immagini nelle cartelle DB_PROBS_SEG e/o DB_NORMAL_SEG')
 
-    X = []
-    y = []
-
-    training_data = create_training_data()
-
-    for features, label in training_data:
-        X.append(features)
-        y.append(label)
-
-    X = np.array(X)
-    X = X.reshape(-1, X.shape[1], X.shape[2], 1)
+    X, y = create_training_data(savedata=config.NEURAL_NETWORK_TRAIN.getboolean('SAVE_TRAIN_DATA'))
 
     model, modelname = create_model(X, y, layer_size=config.NEURAL_NETWORK_MODEL.getint('LAYER_SIZE'),
                                     dense_layer=config.NEURAL_NETWORK_MODEL.getint('DENSE_LAYER'),
