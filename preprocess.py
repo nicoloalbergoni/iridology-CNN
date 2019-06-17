@@ -1,10 +1,11 @@
 import os
 import traceback
 import configparser
+import cv2
 from tqdm import tqdm
 
 import Preprocessing.config as config
-from Preprocessing.display import draw_circles
+from Preprocessing.display import draw_circles, show_images
 from Preprocessing.exceptions import ConfigurationFileNotFoundError, CannotLoadImagesError, CircleNotFoundError, MultipleCirclesFoundError
 from Preprocessing.processing import pupil_recognition, iris_recognition, segmentation
 from Preprocessing.utils import load_image, resize_segments, save_segments, check_folders, get_average_shape, crop_image
@@ -18,7 +19,8 @@ def create_data(path):
     images, titles = load_image(path, extention=config.UTILS.get('IMAGE_EXTENTION'), resize=config.UTILS.getboolean(
         'RESIZE'), resize_shape=config.UTILS.getint('RESIZE_SHAPE'))
     if images is None or len(images) == 0:
-        raise CannotLoadImagesError('Non è stato possibile caricare il set di immagini')
+        raise CannotLoadImagesError(
+            'Non è stato possibile caricare il set di immagini')
 
     final_titles = []
     for img, title in tqdm(zip(images, titles), total=len(images)):
@@ -42,8 +44,10 @@ def create_data(path):
 
             cropped_array.append(cropped_image)
             final_titles.append(title)
-            # cv2.imshow('Cropped image', cropped_image)
-            # show_images(img)
+
+            cv2.imshow('Cropped image', cropped_image)
+            #show_images(img, time=0)
+
         except CircleNotFoundError:
             circle_skipped_count += 1
             continue
@@ -57,7 +61,8 @@ def create_data(path):
 
     print('\n')
     print('Skipped', circle_skipped_count, 'images')
-    print('Skipped', multiple_circle_skipped_count, 'images, multiple circles were found')
+    print('Skipped', multiple_circle_skipped_count,
+          'images, multiple circles were found')
     print('Skipped', other_skipped_count, 'images for other problems')
     return cropped_array, final_titles
 

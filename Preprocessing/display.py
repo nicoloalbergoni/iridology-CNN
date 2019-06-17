@@ -2,9 +2,9 @@ import cv2
 import numpy as np
 
 
-def show_images(image):
+def show_images(image, time=0):
     cv2.imshow('Circled', image)
-    cv2.waitKey(0)
+    cv2.waitKey(time)
     cv2.destroyAllWindows()
 
 
