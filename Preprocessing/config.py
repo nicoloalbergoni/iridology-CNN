@@ -19,7 +19,7 @@ NEURAL_NETWORK_PREDICT = None
 
 def load_config_file(path):
     if not os.path.exists(path):
-        raise ConfigurationFileNotFoundError('File di configurazione non trovato')
+        raise ConfigurationFileNotFoundError('Configuration file not found')
 
     config.read(path)
     global PREPROCESSING, UTILS, FILTERING_PUPIL, FILTERING_IRIS, THRESHOLD_PUPIL, THRESHOLD_IRIS, HOUGH_PUPIL, \

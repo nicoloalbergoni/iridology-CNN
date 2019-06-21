@@ -20,7 +20,7 @@ def create_data(path):
         'RESIZE'), resize_shape=config.UTILS.getint('RESIZE_SHAPE'))
     if images is None or len(images) == 0:
         raise CannotLoadImagesError(
-            'Non è stato possibile caricare il set di immagini')
+            'The image set could not be loaded')
 
     final_titles = []
     for img, title in tqdm(zip(images, titles), total=len(images)):
@@ -71,7 +71,7 @@ def main():
     try:
         config.load_config_file('./config.ini')
     except KeyError as e:
-        print('File di configurazione non corretto: manca la sezione', e)
+        print('Incorrect configuration file format: missing section', e)
         return
     except ConfigurationFileNotFoundError as e:
         print(e)
@@ -88,7 +88,7 @@ def main():
     cropped_dict = {}
 
     if check_folders(DATADIR) is False:
-        print('Non sono presenti immagini nelle cartelle DB_PROBS e/o DB_NORMAL')
+        print('No images found in the folder DB_PROBS and/or DB_NORMAL')
         return
 
     for category in tqdm(CATEGORIES):

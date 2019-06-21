@@ -42,12 +42,12 @@ def pupil_recognition(image, thresholdpupil=70, incBright=False, adjGamma=False)
 
     if circles is None:
         # TODO: Gestire il caso in cui non trova cerchi
-        raise CircleNotFoundError('Nessun cerchio trovato nella pupilla')
+        raise CircleNotFoundError('No pupil has been recognized')
     elif circles.shape[0:2] == (1, 1):
         return circles[0, 0]
     else:
         # TODO: Gestire il caso in cui trovo più cerchi
-        raise MultipleCirclesFoundError('E\' stato rilevato più di un cerchio')
+        raise MultipleCirclesFoundError('Error in recognizing the pupil, more than one circle has been detected')
 
 
 def iris_recognition(image, thresholdiris=160, incBright=False, adjGamma=False):
@@ -87,12 +87,12 @@ def iris_recognition(image, thresholdiris=160, incBright=False, adjGamma=False):
 
     if circles is None:
         # TODO: Gestire il caso in cui non trova cerchi
-        raise CircleNotFoundError('Nessun cerchio trovato nell\'iride')
+        raise CircleNotFoundError('No iris has been recognized')
     elif circles.shape[0:2] == (1, 1):
         return circles[0, 0]
     else:
         # TODO: Gestire il caso in cui trovo più cerchi
-        raise MultipleCirclesFoundError('E\' stato rilevato più di un cerchio')
+        raise MultipleCirclesFoundError('Error in recognizing the iris, more than one circle has been detected')
 
 
 def segmentation(image, iris_circle, pupil_circle, startangle, endangle, min_radius, max_radius):

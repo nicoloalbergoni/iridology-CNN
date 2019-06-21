@@ -34,7 +34,7 @@ def main():
     try:
         config.load_config_file('./config.ini')
     except KeyError as e:
-        print('File di configurazione non corretto: manca la sezione', e)
+        print('Incorrect configuration file format: missing section', e)
         return
     except ConfigurationFileNotFoundError as e:
         print(e)
@@ -50,7 +50,7 @@ def main():
     DATADIR = 'DATA_TO_PREDICT'
 
     if check_folders(PARENT_DIR, DATADIR) is False:
-        print('Non sono presenti immagini nella cartella DATA_TO_PREDICT')
+        print('No images found in the folder DATA_TO_PREDICT')
         return
 
     model = None
@@ -61,7 +61,7 @@ def main():
             break
 
     if model is None:
-        print('Modello non trovato')
+        print('Model not found in folder PREDICTION')
         return
 
     titles = []
