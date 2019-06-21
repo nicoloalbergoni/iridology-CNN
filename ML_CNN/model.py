@@ -9,36 +9,36 @@ from tensorflow.keras.layers import Dense, Activation, Flatten
 from tensorflow.keras.models import Sequential
 
 
-def create_model(X, y, layer_size=64, dense_layer=0, conv_layer=3):
-    # TODO: Va bene fare la normalizzazione in questo modo ?
+def create_model(X, y, layer_size=64, dense_layer=0, conv_layer=3, activation='relu', loss='binary_crossentropy',
+                  optimizer='adam', conv_pool_size= 3, pooling_pool_size= 2):
 
     modelname = f"{conv_layer}-conv-{layer_size}-nodes-{dense_layer}-dense-{int(time.time())}.model"
 
     model = Sequential()
 
-    model.add(Conv2D(layer_size, (3, 3), input_shape=X.shape[1:]))
-    model.add(Activation('relu'))
+    model.add(Conv2D(layer_size, (conv_pool_size, conv_pool_size), input_shape=X.shape[1:]))
+    model.add(Activation(activation))
     # model.add(BatchNormalization())
-    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(MaxPooling2D(pool_size=(pooling_pool_size, pooling_pool_size)))
 
     for l in range(conv_layer - 1):
-        model.add(Conv2D(layer_size, (3, 3)))
-        model.add(Activation('relu'))
-        model.add(MaxPooling2D(pool_size=(2, 2)))
+        model.add(Conv2D(layer_size, (conv_pool_size, conv_pool_size)))
+        model.add(Activation(activation))
+        model.add(MaxPooling2D(pool_size=(pooling_pool_size, pooling_pool_size)))
 
     # this converts our 3D feature maps to 1D feature vectors
     model.add(Flatten())
 
     for l in range(dense_layer):
         model.add(Dense(layer_size))
-        model.add(Activation('relu'))
+        model.add(Activation(activation))
         # model.add(Dropout(0.2))
 
     model.add(Dense(1))
     model.add(Activation('sigmoid'))
 
-    model.compile(loss='binary_crossentropy',
-                  optimizer='adam',
+    model.compile(loss=loss,
+                  optimizer=optimizer,
                   metrics=['accuracy'])
 
     return model, modelname
@@ -51,6 +51,7 @@ def train_model(model, modelname, X, y, batch_size=32, epochs=3, validation_spli
     if not os.path.exists(MODELDIR):
         os.makedirs(MODELDIR)
 
+    # TODO: Va bene fare la normalizzazione in questo modo ?
     std_X = X / 255.0
     # std_X = tf.map_fn(lambda frame: tf.image.per_image_standardization(frame), X)
 

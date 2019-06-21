@@ -32,7 +32,13 @@ def main():
 
     model, modelname = create_model(X, y, layer_size=config.NEURAL_NETWORK_MODEL.getint('LAYER_SIZE'),
                                     dense_layer=config.NEURAL_NETWORK_MODEL.getint('DENSE_LAYER'),
-                                    conv_layer=config.NEURAL_NETWORK_MODEL.getint('CONV_LAYER'))
+                                    conv_layer=config.NEURAL_NETWORK_MODEL.getint('CONV_LAYER'),
+                                    conv_pool_size=config.NEURAL_NETWORK_MODEL.getint('CONV_POOL_SIZE'),
+                                    pooling_pool_size=config.NEURAL_NETWORK_MODEL.getint('POLLING_POOL_SIZE'),
+                                    activation=config.NEURAL_NETWORK_MODEL.get('ACTIVATION_FUNCTION'),
+                                    loss=config.NEURAL_NETWORK_MODEL.get('LOSS_FUNCTION'),
+                                    optimizer=config.NEURAL_NETWORK_MODEL.get('OPTIMIZER'))
+
     train_model(model, modelname, X, y, batch_size=config.NEURAL_NETWORK_TRAIN.getint('BATCH_SIZE'),
                 epochs=config.NEURAL_NETWORK_TRAIN.getint('EPOCHS'),
                 validation_split=config.NEURAL_NETWORK_TRAIN.getfloat('VALIDATION_SPLIT'),

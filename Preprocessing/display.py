@@ -1,10 +1,20 @@
 import cv2
 import numpy as np
+import keyboard
+
+closeWindows = False
 
 
 def show_images(image, time=0):
+    global closeWindows
+    if closeWindows is True:
+        return
     cv2.imshow('Circled', image)
     cv2.waitKey(time)
+    if keyboard.is_pressed('esc'):
+        closeWindows = True
+        cv2.destroyAllWindows()
+        return
     cv2.destroyAllWindows()
 
 

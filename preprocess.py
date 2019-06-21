@@ -46,7 +46,10 @@ def create_data(path):
             final_titles.append(title)
 
             cv2.imshow('Cropped image', cropped_image)
-            #show_images(img, time=0)
+
+            if config.PREPROCESSING.getboolean('SHOW_IMAGES') is True:
+                show_images(img, time=0)
+
 
         except CircleNotFoundError:
             circle_skipped_count += 1
