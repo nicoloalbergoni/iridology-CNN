@@ -88,8 +88,8 @@ def main():
     cropped_dict = {}
 
     if check_folders(DATADIR) is False:
-        raise Exception(
-            'Non sono presenti immagini nelle cartelle DB_PROBS e/o DB_NORMAL')
+        print('Non sono presenti immagini nelle cartelle DB_PROBS e/o DB_NORMAL')
+        return
 
     for category in tqdm(CATEGORIES):
         data_path = os.path.join(DATADIR, category)

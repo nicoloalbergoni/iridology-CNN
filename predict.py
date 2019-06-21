@@ -50,7 +50,8 @@ def main():
     DATADIR = 'DATA_TO_PREDICT'
 
     if check_folders(PARENT_DIR, DATADIR) is False:
-        raise Exception('Non sono presenti immagini nella cartella DATA_TO_PREDICT')
+        print('Non sono presenti immagini nella cartella DATA_TO_PREDICT')
+        return
 
     model = None
     for file in os.listdir(PARENT_DIR):
