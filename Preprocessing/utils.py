@@ -30,7 +30,6 @@ def load_image(path, extention='jpg', resize=False, resize_shape=300):
             im = cv2.imread(os.path.join(path, title))
             if im is None:
                 load_fail_count += 1
-                continue
 
             titles.append(title)
             im = resize_img(im, resize_shape) if resize else im
@@ -38,8 +37,6 @@ def load_image(path, extention='jpg', resize=False, resize_shape=300):
             images.append(im)
     if load_fail_count != 0:
         print('Could not load', load_fail_count, 'images')
-    # TODO: Vedere se il shuffle in load image è necessario
-    #random.shuffle(images)
     return images, titles
 
 
