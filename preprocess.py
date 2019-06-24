@@ -45,7 +45,7 @@ def create_data(path):
             cropped_array.append(cropped_image)
             final_titles.append(title)
 
-            cv2.imshow('Cropped image', cropped_image)
+            cv2.imshow('Segmented and Cropped image', cropped_image)
 
             if config.PREPROCESSING.getboolean('SHOW_IMAGES') is True:
                 show_images(img, time=0)

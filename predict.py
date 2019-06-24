@@ -83,10 +83,6 @@ def main():
     resized_segments = np.array(resized_segments)
     resized_segments = resized_segments.reshape(-1, resized_segments.shape[1], resized_segments.shape[2], 1)
 
-    # for i in resized_segments:
-    #     cv2.imwrite('./TEMP_PREDICTION_SEGMENT/' + str(random.randint(1, 100)) + '.jpg', i)
-    #     cv2.imshow('d', i)
-    #     cv2.waitKey(0)
     try:
         predictions = model.predict(resized_segments)
     except Exception as e:

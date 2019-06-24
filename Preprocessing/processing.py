@@ -38,7 +38,7 @@ def pupil_recognition(image, thresholdpupil=70, incBright=False, adjGamma=False)
         param1=config.HOUGH_PUPIL.getint('PARAM1'), param2=config.HOUGH_PUPIL.getint('PARAM2'),
         minRadius=config.HOUGH_PUPIL.getint('MIN_RADIUS'), maxRadius=config.HOUGH_PUPIL.getint('MAX_RADIUS'))
 
-    # cv2.imshow('Pupil Threshold', thresh)
+    cv2.imshow('Pupil Threshold', thresh)
 
     if circles is None:
         # TODO: Gestire il caso in cui non trova cerchi
@@ -81,9 +81,9 @@ def iris_recognition(image, thresholdiris=160, incBright=False, adjGamma=False):
         param1=config.HOUGH_IRIS.getint('PARAM1'), param2=config.HOUGH_IRIS.getint('PARAM2'),
         minRadius=config.HOUGH_IRIS.getint('MIN_RADIUS'), maxRadius=config.HOUGH_IRIS.getint('MAX_RADIUS'))
 
-    # cv2.imshow('Filtered', f_image)
-    # cv2.imshow('Iris Threshold', thresh)
-    # cv2.imshow('Canny', canny)
+    cv2.imshow('Filtered', f_image)
+    cv2.imshow('Iris Threshold', thresh)
+    cv2.imshow('Canny', canny)
 
     if circles is None:
         # TODO: Gestire il caso in cui non trova cerchi
