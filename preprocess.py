@@ -30,11 +30,12 @@ def create_data(path):
             iris_circle = iris_recognition(img, thresholdiris=config.PREPROCESSING.getint('THRESHOLD_IRIS'), incBright=config.FILTERING_IRIS.getboolean(
                 'INCREASE_BRIGHTENESS'), adjGamma=config.FILTERING_IRIS.getboolean('ADJUST_GAMMA'))
 
-            segmented_image, mask = segmentation(
+            segmented_image, _ = segmentation(
                 img, iris_circle, pupil_circle, startangle=config.PREPROCESSING.getint(
                     'STARTANGLE'),
                 endangle=config.PREPROCESSING.getint('ENDANGLE'), min_radius=config.PREPROCESSING.getint('MIN_RADIUS'), max_radius=config.PREPROCESSING.getint('MAX_RADIUS'))
-            # cv2.imshow('Segmented image', segmented_image)
+            
+            cv2.imshow('Segmented image', segmented_image)
 
             cropped_image = crop_image(
                 segmented_image, offset=config.UTILS.getint('CROP_OFFSET'),

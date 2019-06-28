@@ -99,7 +99,7 @@ def segmentation(image, iris_circle, pupil_circle, startangle, endangle, min_rad
     segmented = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     height, width = segmented.shape
     outer_sector = np.zeros((height, width), np.uint8)
-    pupil_sector = np.zeros((height, width), np.uint8)
+    inner_sector = np.zeros((height, width), np.uint8)
 
     if min_radius >= 100 or min_radius <= 0:
         min_radius = pupil_circle[2]
@@ -114,10 +114,15 @@ def segmentation(image, iris_circle, pupil_circle, startangle, endangle, min_rad
     if min_radius < max_radius:
         draw_ellipse(outer_sector, (iris_circle[0], iris_circle[1]), (
             max_radius, max_radius), 0, -startangle, -endangle, 255, thickness=-1)
-        cv2.circle(pupil_sector, (pupil_circle[0], pupil_circle[1]), int(
+        cv2.circle(inner_sector, (pupil_circle[0], pupil_circle[1]), int(
             min_radius), 255, thickness=-1)
-    mask = cv2.subtract(outer_sector, pupil_sector)
+    mask = cv2.subtract(outer_sector, inner_sector)
     masked_image = cv2.bitwise_and(segmented, segmented, mask=mask)
+
+    cv2.imshow('Outer sector mask', outer_sector)
+    cv2.imshow('Inner sector mask', inner_sector)
+    cv2.imshow('Outer - Inner mask', mask)
+
     return masked_image, mask
 
 
