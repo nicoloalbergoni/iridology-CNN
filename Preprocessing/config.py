@@ -18,6 +18,13 @@ NEURAL_NETWORK_PREDICT = None
 
 
 def load_config_file(path):
+    """
+    Load and parse the configuration file.
+    This function creates a dictionary for every section in the configuration file.
+
+    :param path: path of the configuration file
+    :type path: str
+    """
     if not os.path.exists(path):
         raise ConfigurationFileNotFoundError('Configuration file not found')
 

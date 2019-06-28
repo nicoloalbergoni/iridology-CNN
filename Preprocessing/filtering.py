@@ -3,6 +3,21 @@ import numpy as np
 
 
 def filtering(img, invgray=False, sharpen=False, grayscale=True):
+    """
+    Apply several filters to an image, such as: grayscale, Bottom Hat Filter and Gaussian Blur.
+    It also provides the ability to enable two more filters: Inverted grayscale and Sharpen.
+
+    :param img: Image to be filtered
+    :type img: numpy.ndarray
+    :param invgray: if true enables the Inverted Grayscale filter
+    :type invgray: bool
+    :param sharpen: if true enables the Sharpen filter
+    :type sharpen: bool
+    :param grayscale: if true converts the image in grayscale
+    :type grayscale: bool
+    :return: The image with the selected filters applied
+    :rtype: numpy.ndarray
+    """
     frame = img
 
     if grayscale is True:
@@ -30,11 +45,15 @@ def filtering(img, invgray=False, sharpen=False, grayscale=True):
 
 def adjust_gamma(image, gamma=1.0):
     """
-    Building a lookup table mapping the pixel values [0, 255] to
-    their adjusted gamma values. Increasing contrast
+    Increase contrast by building a lookup table mapping to map the pixel values [0, 255] to
+    their adjusted gamma values.
+
     :param image: image
+    :type image: numpy.ndarray
     :param gamma: adjusting coefficient
+    :type gamma: float
     :return: adjusted image
+    :rtype: numpy.ndarray
     """
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     h, s, v = cv2.split(hsv)
@@ -57,6 +76,27 @@ def adjust_gamma(image, gamma=1.0):
 
 
 def threshold(img, tValue, adaptive=False, binaryInv=False, otsu=False, dilate=False):
+    """
+    Apply one threshold method to the image based on the chosen parameter.
+    By default the function apply a binary threshold to the image.
+
+    :param img: image
+    :type img: numpy.ndarray
+    :param tValue: threshold value
+    :type tValue: int
+    :param adaptive: if true apply an adaptive threshold method
+    :type adaptive: bool
+    :param binaryInv: if true apply an inverted binary threshold
+    :type binaryInv: bool
+    :param otsu: if true apply OTSU's algorithm to find the optimal threshold value then perform an inverted
+        binary threshold with the calculated threshold value
+    :type otsu: bool
+    :param dilate: if true apply a dilatation transformation to the image after performing one of the
+        previous threshold methods
+    :type dilate: bool
+    :return: the binarized image
+    :rtype: numpy.ndarray
+    """
     if adaptive is False and otsu is False:
         _, thresh = cv2.threshold(img, tValue,
                                   255, cv2.THRESH_BINARY_INV if binaryInv else cv2.THRESH_BINARY)
@@ -76,6 +116,14 @@ def threshold(img, tValue, adaptive=False, binaryInv=False, otsu=False, dilate=F
 
 
 def dilate_thresh(thresh):
+    """
+    Apply a morphological dilatation to the image
+
+    :param thresh: resulted image of a threshold method
+    :type thresh: numpy.ndarray
+    :return: transformed image
+    :rtype: numpy.ndarray
+    """
     kernel = np.ones((3, 3), np.uint8)
     opening = cv2.morphologyEx(
         thresh, cv2.MORPH_OPEN, kernel, iterations=2)
@@ -85,6 +133,16 @@ def dilate_thresh(thresh):
 
 
 def increase_brightness(img, value=30):
+    """
+    Increase the brightness of an image
+
+    :param img: image
+    :type img: numpy.ndarray
+    :param value: brightness factor
+    :type value: int
+    :return: brighten image
+    :rtype: numpy.ndarray
+    """
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     h, s, v = cv2.split(hsv)
     mean_v = v.mean()

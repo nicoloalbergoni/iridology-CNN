@@ -1,12 +1,20 @@
 import os
-import random
 import shutil
-
 import cv2
 import numpy as np
 
 
 def resize_img(im, resize_shape):
+    """
+    Resize an image to the specified size
+
+    :param im: image
+    :type im: numpy.ndarray
+    :param resize_shape: shape of the new image
+    :type resize_shape: int
+    :return: resized image
+    :rtype: numpy.ndarray
+    """
     y, x, _ = im.shape
     if y < x:
         new_x = int((x - y) / 2)
@@ -19,6 +27,20 @@ def resize_img(im, resize_shape):
 
 
 def load_image(path, extention='jpg', resize=False, resize_shape=300):
+    """
+    Loads the images.
+
+    :param path: path to the directory that contains the images
+    :type path: str
+    :param extention: file format of the images; jpg,png,...
+    :type extention: str
+    :param resize: if true calls the resize_img function
+    :type resize: bool
+    :param resize_shape: new shape of the resized image
+    :type resize_shape: int
+    :return: An array of images and the array that contains the titles of the images
+    :rtype: Tuple[List[numpy.ndarray], List[str]]
+    """
     images = []
     images_names = []
     titles = []
@@ -41,18 +63,44 @@ def load_image(path, extention='jpg', resize=False, resize_shape=300):
 
 
 def get_average_shape(cropped_dict):
+    """
+    Get the average width and height among all the images.
+
+    :param cropped_dict: dictionary of cropped images
+    :type cropped_dict: Dict[str, List[numpy.ndarray]]
+    :return: average shape
+    :rtype: numpy.ndarray
+    """
     shapes = np.concatenate(([c.shape for c in cropped_dict['DB_PROBS']], [c.shape for c in cropped_dict['DB_NORMAL']]))
     means = np.around(np.mean(shapes, axis=0)).astype(int)
     return means
 
 
 def resize_segments(cropped_array, resizeshape):
+    """
+    Resize all the segments to the given shape
+
+    :param cropped_array: array of cropped images
+    :type cropped_array: List[numpy.ndarray]
+    :param resizeshape: shape in which to resize
+    :type resizeshape: numpy.ndarray
+    :return: array of resized images
+    :rtype: List[numpy.ndarray]
+    """
     resized_segments = [cv2.resize(c, (resizeshape[1], resizeshape[0]), interpolation=cv2.INTER_AREA) for c in
                         cropped_array]
     return resized_segments
 
 
 def save_segments(resized_segments, path):
+    """
+    Saves the segmented images to the designated directory
+
+    :param resized_segments: array of segments
+    :type resized_segments: List[numpy.ndarray]
+    :param path: Path in which to save images
+    :type path: str
+    """
     if not os.path.exists('./TEMP_SEG'):
         os.makedirs('./TEMP_SEG')
     path = os.path.join('./TEMP_SEG', path + '_SEG')
@@ -69,6 +117,15 @@ def save_segments(resized_segments, path):
 
 
 def check_folders(datadir):
+    """
+    Checks if all the necessary folders exists otherwise it creates them.
+    It also checks if there are images in those folders.
+
+    :param datadir: path of the main directory
+    :type datadir: str
+    :return: True if there are images in the folders otherwise returns false
+    :rtype: bool
+    """
     file_count_normal = 0
     file_count_probs = 0
     if not os.path.exists(datadir):
@@ -95,6 +152,18 @@ def check_folders(datadir):
 
 
 def crop_image(masked_image, offset=30, tollerance=80):
+    """
+    Crops the images around non black pixels.
+
+    :param masked_image: resulting image of the segmentation process
+    :type masked_image: numpy.ndarray
+    :param offset: cropping offset
+    :type offset: int
+    :param tollerance: pixel value tollerance for cropping
+    :type tollerance: int
+    :return: cropped image
+    :rtype: numpy.ndarray
+    """
     mask = masked_image > tollerance
 
     # Coordinates of non-black pixels.
@@ -106,6 +175,6 @@ def crop_image(masked_image, offset=30, tollerance=80):
 
     # Get the contents of the bounding box.
     cropped = masked_image[x0 - offset: x1 + offset, y0 - offset: y1 + offset]
-    # print('Cropped Image Shape', cropped.shape)
+
 
     return cropped

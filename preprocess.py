@@ -30,7 +30,7 @@ def create_data(path, showImages=True):
             iris_circle = iris_recognition(img, thresholdiris=config.PREPROCESSING.getint('THRESHOLD_IRIS'), incBright=config.FILTERING_IRIS.getboolean(
                 'INCREASE_BRIGHTENESS'), adjGamma=config.FILTERING_IRIS.getboolean('ADJUST_GAMMA'))
 
-            segmented_image, _ = segmentation(
+            segmented_image = segmentation(
                 img, iris_circle, pupil_circle, startangle=config.PREPROCESSING.getint(
                     'STARTANGLE'),
                 endangle=config.PREPROCESSING.getint('ENDANGLE'), min_radius=config.PREPROCESSING.getint('MIN_RADIUS'), max_radius=config.PREPROCESSING.getint('MAX_RADIUS'))
@@ -49,7 +49,7 @@ def create_data(path, showImages=True):
             cv2.imshow('Segmented and Cropped image', cropped_image)
 
             if showImages is True:
-                show_images(img, time=0)
+                show_images(img)
 
         except CircleNotFoundError:
             circle_skipped_count += 1

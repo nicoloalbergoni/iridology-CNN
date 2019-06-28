@@ -1,8 +1,5 @@
 import cv2
 import numpy as np
-from scipy.interpolate import interp1d
-from tqdm import tqdm
-
 import Preprocessing.config as config
 from Preprocessing.display import draw_ellipse
 from Preprocessing.exceptions import CircleNotFoundError, MultipleCirclesFoundError
@@ -10,6 +7,22 @@ from Preprocessing.filtering import filtering, threshold, adjust_gamma, increase
 
 
 def pupil_recognition(image, thresholdpupil=70, incBright=False, adjGamma=False):
+    """
+    Performs the recognition of the pupil from a given image.
+    The recognition is done by using the Hough Circle Transform method.
+    To get better result the function apply first the filtering function and then the threshold function
+
+    :param image: image of the eye
+    :type image: numpy.ndarray
+    :param thresholdpupil: threshold value to pass to the threshold function
+    :type thresholdpupil: int
+    :param incBright: threshold value to pass to the threshold function
+    :type incBright: bool
+    :param adjGamma: if true calls the adjust_gamma function on the filtered image
+    :type adjGamma: bool
+    :return: an array that contains the center and the radius of the circle that identify the pupil
+    :rtype: numpy.ndarray
+    """
     f_image = filtering(image, invgray=config.FILTERING_PUPIL.getboolean('INVERT_GRAYSCALE'),
                         grayscale=config.FILTERING_PUPIL.getboolean(
                             'GRAYSCALE'),
@@ -51,6 +64,24 @@ def pupil_recognition(image, thresholdpupil=70, incBright=False, adjGamma=False)
 
 
 def iris_recognition(image, thresholdiris=160, incBright=False, adjGamma=False):
+    """
+
+    Performs the recognition of the iris from a given image.
+    The recognition is done by using the Hough Circle Transform method.
+    To get better result the function apply first the filtering function, then the threshold function and finally
+    a Canny Edge Detector.
+
+    :param image: image of the eye
+    :type image: numpy.ndarray
+    :param thresholdiris: threshold value to pass to the threshold function
+    :type thresholdiris: int
+    :param incBright: threshold value to pass to the threshold function
+    :type incBright: bool
+    :param adjGamma: if true calls the adjust_gamma function on the filtered image
+    :type adjGamma: bool
+    :return:  an array that contains the center and the radius of the circle that identify the iris
+    :rtype: numpy.ndarray
+    """
     f_image = filtering(image, invgray=config.FILTERING_IRIS.getboolean('INVERT_GRAYSCALE'),
                         grayscale=config.FILTERING_IRIS.getboolean(
                             'GRAYSCALE'),
@@ -96,6 +127,27 @@ def iris_recognition(image, thresholdiris=160, incBright=False, adjGamma=False):
 
 
 def segmentation(image, iris_circle, pupil_circle, startangle, endangle, min_radius, max_radius):
+    """
+    Extract a segment of the iris from the image of the eye.
+    The extraction is based on two values of angles and two values of radius.
+
+    :param image: image of the eye
+    :type image: numpy.ndarray
+    :param iris_circle: array that contains the center and the radius of the circle that identifies the iris
+    :type iris_circle: numpy.ndarray
+    :param pupil_circle: array that contains the center and the radius of the circle that identifies the pupil
+    :type pupil_circle: numpy.ndarray
+    :param startangle: starting angle
+    :type startangle: int
+    :param endangle: ending angle
+    :type endangle: int
+    :param min_radius: lower bound of the radius
+    :type min_radius: int
+    :param max_radius: upper bound of the radius
+    :type max_radius: int
+    :return: a black image that contains only the extracted segment as non black pixels
+    :rtype: numpy.ndarray
+    """
     segmented = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     height, width = segmented.shape
     outer_sector = np.zeros((height, width), np.uint8)
@@ -123,41 +175,4 @@ def segmentation(image, iris_circle, pupil_circle, startangle, endangle, min_rad
     cv2.imshow('Inner sector mask', inner_sector)
     cv2.imshow('Outer - Inner mask', mask)
 
-    return masked_image, mask
-
-
-def daugman_normalizaiton(original_eye, circle, pupil_radius=0, startangle=0, endangle=45):
-    start_angle = (360 - endangle) * np.pi / 180
-    end_angle = (360 - startangle) * np.pi / 180
-
-    iris_coordinates = (circle[0], circle[1])
-
-    x = int(iris_coordinates[0])
-    y = int(iris_coordinates[1])
-
-    w = int(round(circle[2]) + 0)
-    h = int(round(circle[2]) + 0)
-
-    # cv2.circle(original_eye, iris_coordinates, int(circle[2]), (255,0,0), thickness=2)
-    iris_image = original_eye[y - h:y + h, x - w:x + w]
-
-    iris_image_to_show = cv2.resize(
-        iris_image, (iris_image.shape[1] * 2, iris_image.shape[0] * 2))
-
-    q = np.arange(start_angle, end_angle, 0.01)  # theta
-    inn = np.arange(int(pupil_radius), int(
-        iris_image_to_show.shape[0] / 2), 1)  # radius
-
-    cartisian_image = np.empty(
-        shape=[inn.size, int(iris_image_to_show.shape[1])])
-    m = interp1d([np.pi * 2, 0], [pupil_radius, iris_image_to_show.shape[1]])
-
-    for r in tqdm(inn):
-        for t in tqdm(q):
-            polarX = int((r * np.cos(t)) + iris_image_to_show.shape[1] / 2)
-            polarY = int((r * np.sin(t)) + iris_image_to_show.shape[0] / 2)
-            cartisian_image[r][int(
-                m(t) - 1)] = iris_image_to_show[polarY][polarX]
-
-    cartisian_image = cartisian_image.astype('uint8')
-    return cartisian_image
+    return masked_image
