@@ -21,3 +21,9 @@ class CannotLoadImagesError(Error):
 class MultipleCirclesFoundError(Error):
     def __init__(self, message):
         self.message = message
+
+
+class CreateDataError(Error):
+    def __init__(self, message):
+        self.message = message
+

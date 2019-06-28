@@ -6,7 +6,7 @@ import numpy as np
 import cv2
 import random
 import Preprocessing.config as config
-from Preprocessing.exceptions import ConfigurationFileNotFoundError, CannotLoadImagesError
+from Preprocessing.exceptions import ConfigurationFileNotFoundError, CannotLoadImagesError, CreateDataError
 from Preprocessing.utils import save_segments, resize_segments
 from preprocess import create_data
 
@@ -36,10 +36,7 @@ def main():
     except KeyError as e:
         print('Incorrect configuration file format: missing section', e)
         return
-    except ConfigurationFileNotFoundError as e:
-        print(e)
-        return
-    except configparser.ParsingError as e:
+    except (ConfigurationFileNotFoundError, configparser.ParsingError) as e:
         print(e)
         return
     except Exception as e:
@@ -69,10 +66,9 @@ def main():
         title = file.title().lower()
         if title.split('.')[-1] == config.UTILS.get('IMAGE_EXTENTION'):
             titles.append(title)
-
     try:
-        cropped_images, titles = create_data(os.path.join(PARENT_DIR, DATADIR))
-    except CannotLoadImagesError as e:
+        cropped_images, titles = create_data(os.path.join(PARENT_DIR, DATADIR), showImages=False)
+    except (CreateDataError, CannotLoadImagesError, ValueError) as e:
         print(e)
         return
 

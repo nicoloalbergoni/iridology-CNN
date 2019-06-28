@@ -6,12 +6,12 @@ from tqdm import tqdm
 
 import Preprocessing.config as config
 from Preprocessing.display import draw_circles, show_images
-from Preprocessing.exceptions import ConfigurationFileNotFoundError, CannotLoadImagesError, CircleNotFoundError, MultipleCirclesFoundError
+from Preprocessing.exceptions import ConfigurationFileNotFoundError, CannotLoadImagesError, CircleNotFoundError, MultipleCirclesFoundError, CreateDataError
 from Preprocessing.processing import pupil_recognition, iris_recognition, segmentation
 from Preprocessing.utils import load_image, resize_segments, save_segments, check_folders, get_average_shape, crop_image
 
 
-def create_data(path):
+def create_data(path, showImages=True):
     cropped_array = []
     circle_skipped_count = 0
     multiple_circle_skipped_count = 0
@@ -48,9 +48,8 @@ def create_data(path):
 
             cv2.imshow('Segmented and Cropped image', cropped_image)
 
-            if config.PREPROCESSING.getboolean('SHOW_IMAGES') is True:
+            if showImages is True:
                 show_images(img, time=0)
-
 
         except CircleNotFoundError:
             circle_skipped_count += 1
@@ -58,9 +57,10 @@ def create_data(path):
         except MultipleCirclesFoundError:
             multiple_circle_skipped_count += 1
             continue
+        except ValueError: raise
         except Exception:
             other_skipped_count += 1
-            traceback.print_exc()
+            #traceback.print_exc()
             continue
 
     print('\n')
@@ -68,6 +68,10 @@ def create_data(path):
     print('Skipped', multiple_circle_skipped_count,
           'images, multiple circles were found')
     print('Skipped', other_skipped_count, 'images for other problems')
+
+    if len(cropped_array) == 0:
+        raise CreateDataError('No segment could be extracted from the images')
+
     return cropped_array, final_titles
 
 
@@ -77,10 +81,7 @@ def main():
     except KeyError as e:
         print('Incorrect configuration file format: missing section', e)
         return
-    except ConfigurationFileNotFoundError as e:
-        print(e)
-        return
-    except configparser.ParsingError as e:
+    except (ConfigurationFileNotFoundError, configparser.ParsingError) as e:
         print(e)
         return
     except Exception as e:
@@ -98,8 +99,8 @@ def main():
     for category in tqdm(CATEGORIES):
         data_path = os.path.join(DATADIR, category)
         try:
-            cropped_dict[category], _ = create_data(data_path)
-        except CannotLoadImagesError as e:
+            cropped_dict[category], _ = create_data(data_path, showImages=config.PREPROCESSING.getboolean('SHOW_IMAGES'))
+        except (CreateDataError, CannotLoadImagesError, ValueError) as e:
             print(e)
             return
 
