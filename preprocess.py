@@ -12,6 +12,16 @@ from Preprocessing.utils import load_image, resize_segments, save_segments, chec
 
 
 def create_data(path, showImages=True):
+    """
+    Crates the array that contains the cropped segments of the iris
+
+    :param path: path to the data directory
+    :type path: str
+    :param showImages: if true call the show_images function
+    :type showImages: bool
+    :return: Array of cropped images and array of titles
+    :rtype: Tuple[List[numpy.ndarray], List[str]]
+    """
     cropped_array = []
     circle_skipped_count = 0
     multiple_circle_skipped_count = 0

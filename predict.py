@@ -3,11 +3,9 @@ import configparser
 import traceback
 import tensorflow as tf
 import numpy as np
-import cv2
-import random
 import Preprocessing.config as config
 from Preprocessing.exceptions import ConfigurationFileNotFoundError, CannotLoadImagesError, CreateDataError
-from Preprocessing.utils import save_segments, resize_segments
+from Preprocessing.utils import resize_segments
 from preprocess import create_data
 
 
@@ -82,7 +80,7 @@ def main():
     try:
         predictions = model.predict(resized_segments)
     except Exception as e:
-        traceback.print_exc()
+        #traceback.print_exc()
         return
 
     CATEGORIES = ['PROBS', 'NORMAL']

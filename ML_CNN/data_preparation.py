@@ -7,7 +7,15 @@ from tqdm import tqdm
 
 
 def create_training_data(savedata=False):
+    """
+    Creates the vectors of features and labels for the training algorithm.
+    The vector of features is represented as X while the vector of labels is represented as y.
 
+    :param savedata: if true saves the vectors X and y localli in pickles files
+    :type savedata: bool
+    :return: Vector of features and labels
+    :rtype: Tuple[numpy.ndarray, List[int]]
+    """
     SEGMENTDIR = "./TEMP_SEG"
     CATEGORIES = ['DB_NORMAL_SEG', 'DB_PROBS_SEG']
     training_data = []

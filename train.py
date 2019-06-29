@@ -1,4 +1,3 @@
-import numpy as np
 import configparser
 import traceback
 import Preprocessing.config as config
