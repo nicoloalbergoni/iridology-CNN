@@ -28,6 +28,38 @@ def check_folders(parentdir, datadir):
         return False
 
 
+def make_predictions(path, datadir, model):
+    titles = []
+    for file in os.listdir(os.path.join(path, datadir)):
+        title = file.title().lower()
+        if title.split('.')[-1] == config.UTILS.get('IMAGE_EXTENTION'):
+            titles.append(title)
+    try:
+        print('Image processing ...')
+        cropped_images, titles = create_data(
+            os.path.join(path, datadir), showImages=False)
+    except (CreateDataError, CannotLoadImagesError, ValueError) as e:
+        raise
+
+    shape = model.input_shape
+    resized_segments = resize_segments(
+        cropped_images, shape[1:3])
+
+    resized_segments = np.array(resized_segments)
+    resized_segments = resized_segments.reshape(
+        -1, resized_segments.shape[1], resized_segments.shape[2], 1)
+
+    try:
+        predictions = model.predict(resized_segments)
+    except Exception as e:
+        raise
+
+    if predictions is not None and len(predictions) != 0:
+        return predictions, titles
+    else:
+        raise Exception("Couldn't make any predictions")
+
+
 def main():
     try:
         config.load_config_file('./config.ini')
@@ -52,6 +84,7 @@ def main():
     for file in os.listdir(PARENT_DIR):
         title = file.title().lower()
         if title.split('.')[-1] == 'model':
+            print('Using model:', title)
             model = tf.keras.models.load_model(os.path.join(PARENT_DIR, title))
             break
 
@@ -59,31 +92,18 @@ def main():
         print('Model not found in folder PREDICTION')
         return
 
-    titles = []
-    for file in os.listdir(os.path.join(PARENT_DIR, DATADIR)):
-        title = file.title().lower()
-        if title.split('.')[-1] == config.UTILS.get('IMAGE_EXTENTION'):
-            titles.append(title)
     try:
-        cropped_images, titles = create_data(os.path.join(PARENT_DIR, DATADIR), showImages=False)
+        predictions, titles = make_predictions(PARENT_DIR, DATADIR, model)
     except (CreateDataError, CannotLoadImagesError, ValueError) as e:
         print(e)
         return
-
-    shape = model.input_shape
-    resized_segments = resize_segments(
-        cropped_images, shape[1:3])
-
-    resized_segments = np.array(resized_segments)
-    resized_segments = resized_segments.reshape(-1, resized_segments.shape[1], resized_segments.shape[2], 1)
-
-    try:
-        predictions = model.predict(resized_segments)
     except Exception as e:
-        #traceback.print_exc()
+        print(e)
+        # traceback.print_exc()
         return
 
-    CATEGORIES = ['PROBS', 'NORMAL']
+    CATEGORIES = ['NORMAL', 'PROBS']
+    print('\n')
 
     for prediction, title in zip(predictions[0:], titles):
         print(f'Image {title}, prediction:', CATEGORIES[int(prediction[0])])
@@ -91,4 +111,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

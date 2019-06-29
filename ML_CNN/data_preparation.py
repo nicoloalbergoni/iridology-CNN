@@ -22,6 +22,7 @@ def create_training_data(savedata=False):
     X = []
     y = []
 
+    print('Loading segments ...')
     for category in CATEGORIES:
         path = os.path.join(SEGMENTDIR, category)
         class_num = CATEGORIES.index(category)  # 0 = Normal 1 = Problem

@@ -6,13 +6,13 @@ closeWindows = False
 
 
 def show_images(image):
-    '''
+    """
     Activate image display
 
     :param image: image with the circles found
     :type image: numpy.ndarray
     :rtype: None
-    '''
+    """
     global closeWindows
     if closeWindows is True:
         return
@@ -26,7 +26,7 @@ def show_images(image):
 
 
 def draw_circles(real_image, pupil_circles, iris_circles):
-    """"
+    """
     Draws iris and pupil circles onto the original image
 
     :param real_image: Original image
