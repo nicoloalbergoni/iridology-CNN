@@ -1,0 +1,65 @@
+\documentclass[12pt,twoside,openright]{report}
+\usepackage{minted}
+\usepackage{xcolor}
+\definecolor{light-gray}{rgb}{0.9,0.9,0.9}
+\usepackage{emptypage}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{graphicx}
+\graphicspath{ {immagini/} }
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[a4paper,width=150mm,top=30mm,bottom=30mm,left=30mm,right=30mm,bindingoffset=6mm]{geometry}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\setlength{\headheight}{15pt}% 
+\fancyhead{}
+\fancyhead[RE, LO]{\leftmark}
+\fancyfoot{}
+\fancyfoot[LE,RO]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+\linespread{1.5}\selectfont
+
+\begin{document}
+
+  \shipout\null  
+
+  \input{capitoli/abstract}
+  
+  \tableofcontents
+  
+  \chapter{Introduzione}
+  \input{capitoli/introduzione.tex}
+  
+  \chapter{Iridologia}
+  \input{capitoli/iridologia.tex}
+  
+  \chapter{Machine Learning applicato all'iridologia}
+  \input{capitoli/ml_iridologia.tex}
+  
+  \chapter{Struttra del progetto}
+  \section{Tecnologie}
+  \input{capitoli/struttura_progetto/tecnologie.tex}
+  \section{Struttura del codice}
+  \input{capitoli/struttura_progetto/struttura.tex}
+  \section{File di configurazione}
+  \input{capitoli/struttura_progetto/file_configurazione.tex}
+  
+  \chapter{Premesse}
+  \input{capitoli/premesse.tex}
+  
+  \chapter{Panoramica del processo di funzionamento}
+  \input{capitoli/processi.tex}
+  
+  \chapter{Elbaorazione delle immagini}
+  \input{capitoli/elaborazione_immagini/intro.tex}
+  \section{Caricamento delle immagini}
+  \input{capitoli/elaborazione_immagini/caricamento_immagini.tex}
+  \section{Filtri}
+  \input{capitoli/elaborazione_immagini/filtri/intro.tex}
+  \subsection{Trasformazioni morfologiche}
+  \input{capitoli/elaborazione_immagini/filtri/trasformazioni_morfologiche.tex}
+\end{document}

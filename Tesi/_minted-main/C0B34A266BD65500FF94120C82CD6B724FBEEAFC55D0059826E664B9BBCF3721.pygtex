@@ -1,0 +1,14 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{main}\PYG{p}{():}
+    \PYG{k}{try}\PYG{p}{:}
+        \PYG{n}{config}\PYG{o}{.}\PYG{n}{load\PYGZus{}config\PYGZus{}file}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}./config.ini\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{except} \PYG{n+ne}{KeyError} \PYG{k}{as} \PYG{n}{e}\PYG{p}{:}
+        \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}Incorrect configuration file format: missing section\PYGZsq{}}\PYG{p}{,} \PYG{n}{e}\PYG{p}{)}
+        \PYG{k}{return}
+    \PYG{k}{except} \PYG{p}{(}\PYG{n}{ConfigurationFileNotFoundError}\PYG{p}{,} \PYG{n}{configparser}\PYG{o}{.}\PYG{n}{ParsingError}\PYG{p}{)} \PYG{k}{as} \PYG{n}{e}\PYG{p}{:}
+        \PYG{k}{print}\PYG{p}{(}\PYG{n}{e}\PYG{p}{)}
+        \PYG{k}{return}
+    \PYG{k}{except} \PYG{n+ne}{Exception} \PYG{k}{as} \PYG{n}{e}\PYG{p}{:}
+        \PYG{n}{traceback}\PYG{o}{.}\PYG{n}{print\PYGZus{}exc}\PYG{p}{()}
+        \PYG{k}{return}
+\end{Verbatim}

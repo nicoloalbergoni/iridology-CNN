@@ -1,0 +1,15 @@
+\babel@toc {italian}{}
+\babel@toc {italian}{}
+\contentsline {chapter}{\numberline {1}Introduzione}{5}% 
+\contentsline {chapter}{\numberline {2}Iridologia}{7}% 
+\contentsline {chapter}{\numberline {3}Machine Learning applicato all'iridologia}{9}% 
+\contentsline {chapter}{\numberline {4}Struttra del progetto}{11}% 
+\contentsline {section}{\numberline {4.1}Tecnologie}{11}% 
+\contentsline {section}{\numberline {4.2}Struttura del codice}{12}% 
+\contentsline {section}{\numberline {4.3}File di configurazione}{13}% 
+\contentsline {chapter}{\numberline {5}Premesse}{15}% 
+\contentsline {chapter}{\numberline {6}Panoramica del processo di funzionamento}{17}% 
+\contentsline {chapter}{\numberline {7}Elbaorazione delle immagini}{21}% 
+\contentsline {section}{\numberline {7.1}Caricamento delle immagini}{21}% 
+\contentsline {section}{\numberline {7.2}Filtri}{22}% 
+\contentsline {subsection}{\numberline {7.2.1}Trasformazioni morfologiche}{22}% 
