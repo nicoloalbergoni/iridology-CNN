@@ -1,12 +1,14 @@
+import configparser
 import os
 import traceback
-import configparser
+
 import cv2
 from tqdm import tqdm
 
 import Preprocessing.config as config
 from Preprocessing.display import draw_circles, show_images
-from Preprocessing.exceptions import ConfigurationFileNotFoundError, CannotLoadImagesError, CircleNotFoundError, MultipleCirclesFoundError, CreateDataError
+from Preprocessing.exceptions import ConfigurationFileNotFoundError, CannotLoadImagesError, CircleNotFoundError, \
+    MultipleCirclesFoundError, CreateDataError
 from Preprocessing.processing import pupil_recognition, iris_recognition, segmentation
 from Preprocessing.utils import load_image, resize_segments, save_segments, check_folders, get_average_shape, crop_image
 
@@ -35,16 +37,21 @@ def create_data(path, showImages=True):
     final_titles = []
     for img, title in tqdm(zip(images, titles), total=len(images)):
         try:
-            pupil_circle = pupil_recognition(img, thresholdpupil=config.PREPROCESSING.getint('THRESHOLD_PUPIL'), incBright=config.FILTERING_PUPIL.getboolean(
-                'INCREASE_BRIGHTENESS'), adjGamma=config.FILTERING_PUPIL.getboolean('ADJUST_GAMMA'))
-            iris_circle = iris_recognition(img, thresholdiris=config.PREPROCESSING.getint('THRESHOLD_IRIS'), incBright=config.FILTERING_IRIS.getboolean(
-                'INCREASE_BRIGHTENESS'), adjGamma=config.FILTERING_IRIS.getboolean('ADJUST_GAMMA'))
+            pupil_circle = pupil_recognition(img, thresholdpupil=config.PREPROCESSING.getint('THRESHOLD_PUPIL'),
+                                             incBright=config.FILTERING_PUPIL.getboolean(
+                                                 'INCREASE_BRIGHTENESS'),
+                                             adjGamma=config.FILTERING_PUPIL.getboolean('ADJUST_GAMMA'))
+            iris_circle = iris_recognition(img, thresholdiris=config.PREPROCESSING.getint('THRESHOLD_IRIS'),
+                                           incBright=config.FILTERING_IRIS.getboolean(
+                                               'INCREASE_BRIGHTENESS'),
+                                           adjGamma=config.FILTERING_IRIS.getboolean('ADJUST_GAMMA'))
 
             segmented_image = segmentation(
                 img, iris_circle, pupil_circle, startangle=config.PREPROCESSING.getint(
                     'STARTANGLE'),
-                endangle=config.PREPROCESSING.getint('ENDANGLE'), min_radius=config.PREPROCESSING.getint('MIN_RADIUS'), max_radius=config.PREPROCESSING.getint('MAX_RADIUS'))
-            
+                endangle=config.PREPROCESSING.getint('ENDANGLE'), min_radius=config.PREPROCESSING.getint('MIN_RADIUS'),
+                max_radius=config.PREPROCESSING.getint('MAX_RADIUS'))
+
             cv2.imshow('Segmented image', segmented_image)
 
             cropped_image = crop_image(
@@ -67,10 +74,11 @@ def create_data(path, showImages=True):
         except MultipleCirclesFoundError:
             multiple_circle_skipped_count += 1
             continue
-        except ValueError: raise
+        except ValueError:
+            raise
         except Exception:
             other_skipped_count += 1
-            #traceback.print_exc()
+            # traceback.print_exc()
             continue
 
     print('\n')
@@ -109,7 +117,10 @@ def main():
     for category in tqdm(CATEGORIES):
         data_path = os.path.join(DATADIR, category)
         try:
-            cropped_dict[category], _ = create_data(data_path, showImages=config.PREPROCESSING.getboolean('SHOW_IMAGES'))
+            print('\n')
+            print('Create data for', category)
+            cropped_dict[category], _ = create_data(data_path,
+                                                    showImages=config.PREPROCESSING.getboolean('SHOW_IMAGES'))
         except (CreateDataError, CannotLoadImagesError, ValueError) as e:
             print(e)
             return

@@ -10,6 +10,18 @@ from preprocess import create_data
 
 
 def check_folders(parentdir, datadir):
+    """
+
+    Checks if all the necessary folders exists otherwise it creates them.
+    It also checks if there are images in those folders.
+
+    :param parentdir: path to the folder that contains the image folder and the model
+    :type parentdir: str
+    :param datadir: path to the image folder
+    :type datadir: str
+    :return: True if there are images in the folders otherwise returns false
+    :rtype: bool
+    """
     file_count = 0
 
     if not os.path.exists(parentdir):
@@ -29,6 +41,20 @@ def check_folders(parentdir, datadir):
 
 
 def make_predictions(path, datadir, model):
+    """
+
+    Process the images in the DATA_TO_PREDICT folder to extract the segments then passes them to the
+    model to get the predictions.
+
+    :param path: path to the main directory that contains the model
+    :type path: str
+    :param datadir: path to the image folder
+    :type datadir: str
+    :param model: model to ask for predictions to be made
+    :type model: tensorflow.python.keras.engine.sequential.Sequential
+    :return: array of predictions
+    :rtype: Tuple[numpy.ndarray, List[str]]
+    """
     titles = []
     for file in os.listdir(os.path.join(path, datadir)):
         title = file.title().lower()

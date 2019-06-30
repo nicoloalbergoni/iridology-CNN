@@ -2,6 +2,15 @@ import os
 
 
 def check_folders(datadir):
+    """
+    Checks if all the necessary folders exists otherwise it creates them.
+    It also checks if there are images in those folders.
+
+    :param datadir: path of the main directory
+    :type datadir: str
+    :return: True if there are images in the folders otherwise returns false
+    :rtype: bool
+    """
     file_count_normal = 0
     file_count_probs = 0
     if not os.path.exists(datadir):
