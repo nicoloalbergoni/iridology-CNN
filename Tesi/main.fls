@@ -59,8 +59,8 @@ INPUT d:/texlive/2018/texmf-dist/tex/latex/framed/framed.sty
 INPUT d:/texlive/2018/texmf-dist/tex/latex/framed/framed.sty
 INPUT d:/texlive/2018/texmf-dist/tex/latex/float/float.sty
 INPUT d:/texlive/2018/texmf-dist/tex/latex/float/float.sty
-INPUT d:/texlive/2018/texmf-dist/tex/latex/graphics/color.sty
-INPUT d:/texlive/2018/texmf-dist/tex/latex/graphics/color.sty
+INPUT d:/texlive/2018/texmf-dist/tex/latex/xcolor/xcolor.sty
+INPUT d:/texlive/2018/texmf-dist/tex/latex/xcolor/xcolor.sty
 INPUT d:/texlive/2018/texmf-dist/tex/latex/graphics-cfg/color.cfg
 INPUT d:/texlive/2018/texmf-dist/tex/latex/graphics-cfg/color.cfg
 INPUT d:/texlive/2018/texmf-dist/tex/latex/graphics-def/pdftex.def

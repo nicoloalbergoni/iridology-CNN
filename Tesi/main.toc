@@ -13,3 +13,18 @@
 \contentsline {section}{\numberline {7.1}Caricamento delle immagini}{21}% 
 \contentsline {section}{\numberline {7.2}Filtri}{22}% 
 \contentsline {subsection}{\numberline {7.2.1}Trasformazioni morfologiche}{22}% 
+\contentsline {subsection}{\numberline {7.2.2}Gaussian Blur}{23}% 
+\contentsline {subsection}{\numberline {7.2.3}Sharpening filter / Correzione Gamma / Incremento luminosit\IeC {\`a}}{24}% 
+\contentsline {subsection}{\numberline {7.2.4}Threshold}{24}% 
+\contentsline {subsection}{\numberline {7.2.5}Canny Edge Detection}{27}% 
+\contentsline {section}{\numberline {7.3}Circle Hough Transform}{29}% 
+\contentsline {section}{\numberline {7.4}Segmentazione}{32}% 
+\contentsline {section}{\numberline {7.5}Crop, Resize e salvataggio}{34}% 
+\contentsline {chapter}{\numberline {8}Machine Learning}{37}% 
+\contentsline {section}{\numberline {8.1}Data Preparation}{37}% 
+\contentsline {section}{\numberline {8.2}Convolutional Neural Networks}{39}% 
+\contentsline {section}{\numberline {8.3}Il modello}{39}% 
+\contentsline {section}{\numberline {8.4}Training}{43}% 
+\contentsline {section}{\numberline {8.5}Tensorboard}{45}% 
+\contentsline {chapter}{\numberline {9}Predictions}{49}% 
+\contentsline {chapter}{Conclusioni}{51}% 

@@ -1,0 +1,14 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{n}{outer\PYGZus{}sector} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{((}\PYG{n}{height}\PYG{p}{,} \PYG{n}{width}\PYG{p}{),} \PYG{n}{np}\PYG{o}{.}\PYG{n}{uint8}\PYG{p}{)}
+  \PYG{n}{inner\PYGZus{}sector} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{zeros}\PYG{p}{((}\PYG{n}{height}\PYG{p}{,} \PYG{n}{width}\PYG{p}{),} \PYG{n}{np}\PYG{o}{.}\PYG{n}{uint8}\PYG{p}{)}
+
+  \PYG{k}{if} \PYG{n}{min\PYGZus{}radius} \PYG{o}{\PYGZlt{}} \PYG{n}{max\PYGZus{}radius}\PYG{p}{:}
+      \PYG{n}{draw\PYGZus{}ellipse}\PYG{p}{(}\PYG{n}{outer\PYGZus{}sector}\PYG{p}{,} \PYG{p}{(}\PYG{n}{iris\PYGZus{}circle}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{iris\PYGZus{}circle}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]),} \PYG{p}{(}
+          \PYG{n}{max\PYGZus{}radius}\PYG{p}{,} \PYG{n}{max\PYGZus{}radius}\PYG{p}{),} \PYG{l+m+mi}{0}\PYG{p}{,} \PYG{o}{\PYGZhy{}}\PYG{n}{startangle}\PYG{p}{,} \PYG{o}{\PYGZhy{}}\PYG{n}{endangle}\PYG{p}{,} \PYG{l+m+mi}{255}\PYG{p}{,} \PYG{n}{thickness}\PYG{o}{=\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}
+      \PYG{n}{cv2}\PYG{o}{.}\PYG{n}{circle}\PYG{p}{(}\PYG{n}{inner\PYGZus{}sector}\PYG{p}{,} \PYG{p}{(}\PYG{n}{pupil\PYGZus{}circle}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{pupil\PYGZus{}circle}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]),} \PYG{n+nb}{int}\PYG{p}{(}
+          \PYG{n}{min\PYGZus{}radius}\PYG{p}{),} \PYG{l+m+mi}{255}\PYG{p}{,} \PYG{n}{thickness}\PYG{o}{=\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}
+  \PYG{n}{mask} \PYG{o}{=} \PYG{n}{cv2}\PYG{o}{.}\PYG{n}{subtract}\PYG{p}{(}\PYG{n}{outer\PYGZus{}sector}\PYG{p}{,} \PYG{n}{inner\PYGZus{}sector}\PYG{p}{)}
+  \PYG{n}{masked\PYGZus{}image} \PYG{o}{=} \PYG{n}{cv2}\PYG{o}{.}\PYG{n}{bitwise\PYGZus{}and}\PYG{p}{(}\PYG{n}{segmented}\PYG{p}{,} \PYG{n}{segmented}\PYG{p}{,} \PYG{n}{mask}\PYG{o}{=}\PYG{n}{mask}\PYG{p}{)}
+
+  \PYG{k}{return} \PYG{n}{masked\PYGZus{}image}\PYG{p}{,} \PYG{n}{mask}
+\end{Verbatim}

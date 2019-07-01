@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{n}{final\PYGZus{}img} \PYG{o}{=} \PYG{n}{cv2}\PYG{o}{.}\PYG{n}{GaussianBlur}\PYG{p}{(}\PYG{n}{bottom\PYGZus{}hat\PYGZus{}filtered}\PYG{p}{,} \PYG{p}{(}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{),} \PYG{l+m+mi}{0}\PYG{p}{)}
+\end{Verbatim}

@@ -1,7 +1,7 @@
 # Fdb version 3
-["pdflatex"] 1561934410 "c:/Users/Albe/Desktop/tesi-triennale/Tesi/main.tex" "c:/Users/Albe/Desktop/tesi-triennale/Tesi/main.pdf" "main" 1561934410
-  "c:/Users/Albe/Desktop/tesi-triennale/Tesi/main.aux" 1561934410 9 a94a2480d3289e625eea47cd1b285758 ""
-  "c:/Users/Albe/Desktop/tesi-triennale/Tesi/main.tex" 1561934255 1828 ec792d9ff52bf46150ea926f6c95b388 ""
+["pdflatex"] 1562010595 "c:/Users/Albe/Desktop/tesi-triennale/Tesi/main.tex" "c:/Users/Albe/Desktop/tesi-triennale/Tesi/main.pdf" "main" 1562010595
+  "c:/Users/Albe/Desktop/tesi-triennale/Tesi/main.aux" 1562010595 9 a94a2480d3289e625eea47cd1b285758 ""
+  "c:/Users/Albe/Desktop/tesi-triennale/Tesi/main.tex" 1561936334 1872 b121cdf478f62d1da69898f28c8c59e0 ""
   "d:/texlive/2018/texmf-dist/fonts/map/fontname/texfonts.map" 1551288105 3332 103109f5612ad95229751940c61aada0 ""
   "d:/texlive/2018/texmf-dist/fonts/tfm/jknappen/ec/ecrm1200.tfm" 1551287734 3584 f80ddd985bd00e29e9a6047ebd9d4781 ""
   "d:/texlive/2018/texmf-dist/fonts/tfm/public/cm/cmr12.tfm" 1551287195 1288 655e228510b4c2a1abe905c368440826 ""
@@ -45,7 +45,6 @@
   "d:/texlive/2018/texmf-dist/tex/latex/graphics-cfg/color.cfg" 1551288292 1213 620bba36b25224fa9b7e1ccb4ecb76fd ""
   "d:/texlive/2018/texmf-dist/tex/latex/graphics-cfg/graphics.cfg" 1551288292 1224 978390e9c2234eab29404bc21b268d1e ""
   "d:/texlive/2018/texmf-dist/tex/latex/graphics-def/pdftex.def" 1551288292 17334 520b9b85ad8a2a48eda3f643e27a5179 ""
-  "d:/texlive/2018/texmf-dist/tex/latex/graphics/color.sty" 1551288290 7028 112f909feb676788e7ea1c5b0b76320f ""
   "d:/texlive/2018/texmf-dist/tex/latex/graphics/graphics.sty" 1551288290 15272 5a97061616e0c8b2aa79c6615ff769f4 ""
   "d:/texlive/2018/texmf-dist/tex/latex/graphics/graphicx.sty" 1551288290 9063 d0a305975932762117cd1f06a582f896 ""
   "d:/texlive/2018/texmf-dist/tex/latex/graphics/keyval.sty" 1551288290 2591 6404d0c7d28505fb38ce0d86c2e28ae7 ""
@@ -57,11 +56,12 @@
   "d:/texlive/2018/texmf-dist/tex/latex/tools/calc.sty" 1551290935 10212 357072c1d20578a30d6387d8a22e72ab ""
   "d:/texlive/2018/texmf-dist/tex/latex/tools/shellesc.sty" 1551290935 3268 77605a04b5525f60d58f55c47c0771c5 ""
   "d:/texlive/2018/texmf-dist/tex/latex/upquote/upquote.sty" 1551291118 1048 517e01cde97c1c0baf72e69d43aa5a2e ""
+  "d:/texlive/2018/texmf-dist/tex/latex/xcolor/xcolor.sty" 1551291262 55589 34128738f682d033422ca125f82e5d62 ""
   "d:/texlive/2018/texmf-dist/web2c/texmf.cnf" 1551288653 35176 ce7fee66be1fb01dfc6b702a7dbfa0ea ""
   "d:/texlive/2018/texmf-var/web2c/pdftex/pdflatex.fmt" 1551291552 4223237 aac769a6e6c903e7c8b6aafaa95b1eed ""
   "d:/texlive/2018/texmf.cnf" 1551291401 673 4ae7b2f49cee444c5343a45b5d0f169c ""
-  "main.tex" 1561934255 1828 ec792d9ff52bf46150ea926f6c95b388 ""
+  "main.tex" 1561936334 1872 b121cdf478f62d1da69898f28c8c59e0 ""
   (generated)
+  "c:/Users/Albe/Desktop/tesi-triennale/Tesi/main.log"
   "c:/Users/Albe/Desktop/tesi-triennale/Tesi/main.pdf"
   "main.log"
-  "c:/Users/Albe/Desktop/tesi-triennale/Tesi/main.log"

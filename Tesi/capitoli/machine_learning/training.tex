@@ -1,0 +1,46 @@
+A questo punto i prerequisiti fondamentali sono soddisfatti, si è creata la struttura della rete (contenuta nell’oggetto chiamato model) e i dati di input sono organizzati nel modo corretto, si è quindi pronti per il training vero e proprio. Nello script \texttt{train.py} alla terminazione della funzione \texttt{create\_model} viene invocata la funzione \texttt{train\_model}.
+
+\begin{minted}
+  [
+    xleftmargin=\parindent,
+    framesep=2mm,
+    baselinestretch=1.2,  
+    fontsize=\footnotesize,
+    linenos,
+    breaklines
+  ]
+  {python}
+  
+  def train_model(model, modelname, X, y, batch_size=32, epochs=3, validation_split=0.3, tensorboard=True):
+   MODELDIR = './MODELS'
+   LOGDIR = os.path.join(MODELDIR, 'LOGS')
+   if not os.path.exists(MODELDIR):
+       os.makedirs(MODELDIR)
+   std_X = X / 255.0
+   if tensorboard is True:
+       if not os.path.exists(LOGDIR):
+           os.makedirs(LOGDIR)
+
+       tensorboard = TensorBoard(log_dir=os.path.join(LOGDIR, modelname))
+       model.fit(std_X, y, batch_size=batch_size, epochs=epochs, validation_split=validation_split,
+                 callbacks=[tensorboard])
+   else:
+       model.fit(std_X, y, batch_size=batch_size, epochs=epochs, validation_split=validation_split)
+
+   model.save(os.path.join(MODELDIR, modelname)) 
+\end{minted}
+
+La funzione prende in input i vettori di features e labels (\texttt{X} e \texttt{y}), il modello ed altri parametri legati al training. Per prima cosa si effettua una normalizzazione di tutti i pixel di tutte le immagini contenuti nel vettore \texttt{X}, in questo modo si ottengono valori di pixel compresi tra 0 e 1. La normalizzazione è effettuata semplicemente dividendo per 255 tutti i pixel, dato che rappresenta il valore massimo che un pixel può avere. 
+
+Dopo la normalizzazione si chiama il metodo \texttt{fit} sul modello, tale metodo è una funzione richiamabile da ogni modello creato con Tensroflow/Keras. \texttt{Fit} oltre ai vettori \texttt{X} (normalizzato precedentemente) e \texttt{y} prende in input alcuni importanti parametri:
+
+\begin{itemize}
+  \item \textbf{Epochs}: è un parametro che definisce il numero di volte in cui l’algoritmo di apprendimento attraverserà l’intero dataset di input. In sostanza un epoch è una iterazione dell’intero dataset composto dai vettori \texttt{X} e \texttt{y}
+  \item \textbf{Batch Size}: definisce il numero di campioni da analizzare prima di fare un update dei parametri interni (default 32). Sostanzialmente si itera sul numero di campioni specificati da \texttt{batch size}, a fine iterazione si fanno delle prediction ed i risultati sono comparati con i valori previsti dell’output. Si calcola quindi l’errore e tramite esso l’algoritmo di apprendimento modifica i parametri interni per migliorare il modello
+  \item \textbf{Validation Split}: decimale compreso tra 0 e 1, rappresenta la frazione del training set che verrà utilizzata per validare le performance del modello. Il modello terrà da parte questa frazione di dati e non li utilizzerà per il training. Verranno usati alla fine di ogni \texttt{epoch} per calcolare il \texttt{loss} e \texttt{l’accuratezza di validazione}  
+\end{itemize}
+
+A questo punto l’algoritmo di apprendimento inizia. Una volta terminato, la funzione \texttt{train\_model}, precedentemente definita, salva su disco nella cartella \texttt{MODELS} il modello appena trainato in modo da poterlo utilizzare in seguito per la fase di prediction. 
+
+E’ importante far notare il fatto che la fase di training di un modello di rete neurale è un compito computazionalmente complesso e quindi il tempo di attesa per la terminazione del training può variare a seconda di diversi fattori: complessità stessa della rete, numero di epochs, training eseguito su CPU o GPU, numero di dati, etc… E’ quindi consigliato l’uso di uno strumento di analisi dei modelli, chiamato Tensorboard, che permette di analizzare i risultati del modello appena trainato in modo da ridurre il numero di operazione di training da fare per ottenere i risultati desiderati.
+

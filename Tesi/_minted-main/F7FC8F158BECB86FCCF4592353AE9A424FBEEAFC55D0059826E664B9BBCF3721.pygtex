@@ -1,0 +1,7 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{n}{circles} \PYG{o}{=} \PYG{n}{cv2}\PYG{o}{.}\PYG{n}{HoughCircles}\PYG{p}{(}
+   \PYG{n}{thresh}\PYG{p}{,} \PYG{n}{cv2}\PYG{o}{.}\PYG{n}{HOUGH\PYGZus{}GRADIENT}\PYG{p}{,} \PYG{n}{config}\PYG{o}{.}\PYG{n}{HOUGH\PYGZus{}PUPIL}\PYG{o}{.}\PYG{n}{getfloat}\PYG{p}{(}
+       \PYG{l+s+s1}{\PYGZsq{}INVERSE\PYGZus{}RATIO\PYGZsq{}}\PYG{p}{),} \PYG{n}{image}\PYG{o}{.}\PYG{n}{shape}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],}
+   \PYG{n}{param1}\PYG{o}{=}\PYG{n}{config}\PYG{o}{.}\PYG{n}{HOUGH\PYGZus{}PUPIL}\PYG{o}{.}\PYG{n}{getint}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}PARAM1\PYGZsq{}}\PYG{p}{),} \PYG{n}{param2}\PYG{o}{=}\PYG{n}{config}\PYG{o}{.}\PYG{n}{HOUGH\PYGZus{}PUPIL}\PYG{o}{.}\PYG{n}{getint}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}PARAM2\PYGZsq{}}\PYG{p}{),}
+   \PYG{n}{minRadius}\PYG{o}{=}\PYG{n}{config}\PYG{o}{.}\PYG{n}{HOUGH\PYGZus{}PUPIL}\PYG{o}{.}\PYG{n}{getint}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}MIN\PYGZus{}RADIUS\PYGZsq{}}\PYG{p}{),} \PYG{n}{maxRadius}\PYG{o}{=}\PYG{n}{config}\PYG{o}{.}\PYG{n}{HOUGH\PYGZus{}PUPIL}\PYG{o}{.}\PYG{n}{getint}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}MAX\PYGZus{}RADIUS\PYGZsq{}}\PYG{p}{))}
+\end{Verbatim}

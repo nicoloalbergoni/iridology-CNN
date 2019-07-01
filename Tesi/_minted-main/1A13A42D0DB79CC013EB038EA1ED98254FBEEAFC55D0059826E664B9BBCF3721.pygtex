@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{k}{def} \PYG{n+nf}{segmentation}\PYG{p}{(}\PYG{n}{image}\PYG{p}{,} \PYG{n}{iris\PYGZus{}circle}\PYG{p}{,} \PYG{n}{pupil\PYGZus{}circle}\PYG{p}{,} \PYG{n}{startangle}\PYG{p}{,} \PYG{n}{endangle}\PYG{p}{,} \PYG{n}{min\PYGZus{}radius}\PYG{p}{,} \PYG{n}{max\PYGZus{}radius}\PYG{p}{)}
+\end{Verbatim}

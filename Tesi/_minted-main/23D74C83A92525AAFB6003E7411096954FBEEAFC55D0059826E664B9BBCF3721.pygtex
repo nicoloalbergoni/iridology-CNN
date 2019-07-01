@@ -1,0 +1,19 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PYG{k}{def} \PYG{n+nf}{train\PYGZus{}model}\PYG{p}{(}\PYG{n}{model}\PYG{p}{,} \PYG{n}{modelname}\PYG{p}{,} \PYG{n}{X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{batch\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mi}{32}\PYG{p}{,} \PYG{n}{epochs}\PYG{o}{=}\PYG{l+m+mi}{3}\PYG{p}{,} \PYG{n}{validation\PYGZus{}split}\PYG{o}{=}\PYG{l+m+mf}{0.3}\PYG{p}{,} \PYG{n}{tensorboard}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{):}
+   \PYG{n}{MODELDIR} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}./MODELS\PYGZsq{}}
+   \PYG{n}{LOGDIR} \PYG{o}{=} \PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{MODELDIR}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}LOGS\PYGZsq{}}\PYG{p}{)}
+   \PYG{k}{if} \PYG{o+ow}{not} \PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{exists}\PYG{p}{(}\PYG{n}{MODELDIR}\PYG{p}{):}
+       \PYG{n}{os}\PYG{o}{.}\PYG{n}{makedirs}\PYG{p}{(}\PYG{n}{MODELDIR}\PYG{p}{)}
+   \PYG{n}{std\PYGZus{}X} \PYG{o}{=} \PYG{n}{X} \PYG{o}{/} \PYG{l+m+mf}{255.0}
+   \PYG{k}{if} \PYG{n}{tensorboard} \PYG{o+ow}{is} \PYG{n+nb+bp}{True}\PYG{p}{:}
+       \PYG{k}{if} \PYG{o+ow}{not} \PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{exists}\PYG{p}{(}\PYG{n}{LOGDIR}\PYG{p}{):}
+           \PYG{n}{os}\PYG{o}{.}\PYG{n}{makedirs}\PYG{p}{(}\PYG{n}{LOGDIR}\PYG{p}{)}
+
+       \PYG{n}{tensorboard} \PYG{o}{=} \PYG{n}{TensorBoard}\PYG{p}{(}\PYG{n}{log\PYGZus{}dir}\PYG{o}{=}\PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{LOGDIR}\PYG{p}{,} \PYG{n}{modelname}\PYG{p}{))}
+       \PYG{n}{model}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{std\PYGZus{}X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{batch\PYGZus{}size}\PYG{o}{=}\PYG{n}{batch\PYGZus{}size}\PYG{p}{,} \PYG{n}{epochs}\PYG{o}{=}\PYG{n}{epochs}\PYG{p}{,} \PYG{n}{validation\PYGZus{}split}\PYG{o}{=}\PYG{n}{validation\PYGZus{}split}\PYG{p}{,}
+                 \PYG{n}{callbacks}\PYG{o}{=}\PYG{p}{[}\PYG{n}{tensorboard}\PYG{p}{])}
+   \PYG{k}{else}\PYG{p}{:}
+       \PYG{n}{model}\PYG{o}{.}\PYG{n}{fit}\PYG{p}{(}\PYG{n}{std\PYGZus{}X}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{batch\PYGZus{}size}\PYG{o}{=}\PYG{n}{batch\PYGZus{}size}\PYG{p}{,} \PYG{n}{epochs}\PYG{o}{=}\PYG{n}{epochs}\PYG{p}{,} \PYG{n}{validation\PYGZus{}split}\PYG{o}{=}\PYG{n}{validation\PYGZus{}split}\PYG{p}{)}
+
+   \PYG{n}{model}\PYG{o}{.}\PYG{n}{save}\PYG{p}{(}\PYG{n}{os}\PYG{o}{.}\PYG{n}{path}\PYG{o}{.}\PYG{n}{join}\PYG{p}{(}\PYG{n}{MODELDIR}\PYG{p}{,} \PYG{n}{modelname}\PYG{p}{))}
+\end{Verbatim}
