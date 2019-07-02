@@ -82,7 +82,7 @@ def create_data(path, showImages=True):
             continue
 
     print('\n')
-    print('Skipped', circle_skipped_count, 'images')
+    print('Skipped', circle_skipped_count, 'images, circle not found')
     print('Skipped', multiple_circle_skipped_count,
           'images, multiple circles were found')
     print('Skipped', other_skipped_count, 'images for other problems')
