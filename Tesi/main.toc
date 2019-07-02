@@ -1,30 +1,32 @@
 \babel@toc {italian}{}
 \babel@toc {italian}{}
 \contentsline {chapter}{\numberline {1}Introduzione}{5}% 
-\contentsline {chapter}{\numberline {2}Iridologia}{7}% 
-\contentsline {chapter}{\numberline {3}Machine Learning applicato all'iridologia}{9}% 
-\contentsline {chapter}{\numberline {4}Struttra del progetto}{11}% 
-\contentsline {section}{\numberline {4.1}Tecnologie}{11}% 
-\contentsline {section}{\numberline {4.2}Struttura del codice}{12}% 
-\contentsline {section}{\numberline {4.3}File di configurazione}{13}% 
-\contentsline {chapter}{\numberline {5}Premesse}{15}% 
-\contentsline {chapter}{\numberline {6}Panoramica del processo di funzionamento}{17}% 
-\contentsline {chapter}{\numberline {7}Elbaorazione delle immagini}{21}% 
-\contentsline {section}{\numberline {7.1}Caricamento delle immagini}{21}% 
-\contentsline {section}{\numberline {7.2}Filtri}{22}% 
-\contentsline {subsection}{\numberline {7.2.1}Trasformazioni morfologiche}{22}% 
-\contentsline {subsection}{\numberline {7.2.2}Gaussian Blur}{23}% 
-\contentsline {subsection}{\numberline {7.2.3}Sharpening filter / Correzione Gamma / Incremento luminosit\IeC {\`a}}{24}% 
-\contentsline {subsection}{\numberline {7.2.4}Threshold}{24}% 
-\contentsline {subsection}{\numberline {7.2.5}Canny Edge Detection}{27}% 
-\contentsline {section}{\numberline {7.3}Circle Hough Transform}{29}% 
-\contentsline {section}{\numberline {7.4}Segmentazione}{32}% 
-\contentsline {section}{\numberline {7.5}Crop, Resize e salvataggio}{34}% 
-\contentsline {chapter}{\numberline {8}Machine Learning}{37}% 
-\contentsline {section}{\numberline {8.1}Data Preparation}{37}% 
-\contentsline {section}{\numberline {8.2}Convolutional Neural Networks}{39}% 
-\contentsline {section}{\numberline {8.3}Il modello}{39}% 
-\contentsline {section}{\numberline {8.4}Training}{43}% 
-\contentsline {section}{\numberline {8.5}Tensorboard}{45}% 
-\contentsline {chapter}{\numberline {9}Predictions}{49}% 
-\contentsline {chapter}{Conclusioni}{51}% 
+\contentsline {chapter}{\numberline {2}}{7}% 
+\contentsline {section}{\numberline {2.1}Nozioni di iridologia}{7}% 
+\contentsline {section}{\numberline {2.2}Algoritmi di apprendimento automatico applicati all'iridologia}{8}% 
+\contentsline {chapter}{\numberline {3}Struttura del progetto}{11}% 
+\contentsline {section}{\numberline {3.1}Tecnologie}{11}% 
+\contentsline {section}{\numberline {3.2}Struttura del codice}{13}% 
+\contentsline {section}{\numberline {3.3}File di configurazione}{14}% 
+\contentsline {chapter}{\numberline {4}Processi di funzionamento del software e suo utilizzo}{15}% 
+\contentsline {section}{\numberline {4.1}Premesse}{15}% 
+\contentsline {section}{\numberline {4.2}Panoramica del flusso d'esecuzione}{16}% 
+\contentsline {chapter}{\numberline {5}Elaborazione delle immagini}{19}% 
+\contentsline {section}{\numberline {5.1}Caricamento delle immagini}{19}% 
+\contentsline {section}{\numberline {5.2}Filtri}{20}% 
+\contentsline {subsection}{\numberline {5.2.1}Trasformazioni morfologiche}{20}% 
+\contentsline {subsection}{\numberline {5.2.2}Gaussian Blur}{21}% 
+\contentsline {subsection}{\numberline {5.2.3}Sharpening filter / Correzione Gamma / Incremento luminosit\IeC {\`a}}{22}% 
+\contentsline {subsection}{\numberline {5.2.4}Threshold}{22}% 
+\contentsline {subsection}{\numberline {5.2.5}Canny Edge Detection}{25}% 
+\contentsline {section}{\numberline {5.3}Circle Hough Transform}{27}% 
+\contentsline {section}{\numberline {5.4}Segmentazione}{30}% 
+\contentsline {section}{\numberline {5.5}Crop, Resize e salvataggio}{32}% 
+\contentsline {chapter}{\numberline {6}Processo di sviluppo di un modello di rete neurale per applicazioni all'iridologia}{35}% 
+\contentsline {section}{\numberline {6.1}Data Preparation}{35}% 
+\contentsline {section}{\numberline {6.2}Convolutional Neural Networks}{37}% 
+\contentsline {section}{\numberline {6.3}Il modello}{37}% 
+\contentsline {section}{\numberline {6.4}Training}{41}% 
+\contentsline {section}{\numberline {6.5}Tensorboard}{43}% 
+\contentsline {section}{\numberline {6.6}Predictions}{46}% 
+\contentsline {chapter}{Conclusioni}{49}% 
