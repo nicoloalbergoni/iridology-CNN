@@ -1,5 +1,0 @@
-\begin{Verbatim}[commandchars=\\\{\}]
-\PYG{n}{kernel} \PYG{o}{=} \PYG{n}{cv2}\PYG{o}{.}\PYG{n}{getStructuringElement}\PYG{p}{(}\PYG{n}{cv2}\PYG{o}{.}\PYG{n}{MORPH\PYGZus{}ELLIPSE}\PYG{p}{,} \PYG{p}{(}\PYG{l+m+mi}{5}\PYG{p}{,} \PYG{l+m+mi}{5}\PYG{p}{))}
-\PYG{n}{blackhat} \PYG{o}{=} \PYG{n}{cv2}\PYG{o}{.}\PYG{n}{morphologyEx}\PYG{p}{(}\PYG{n}{cimg}\PYG{p}{,} \PYG{n}{cv2}\PYG{o}{.}\PYG{n}{MORPH\PYGZus{}BLACKHAT}\PYG{p}{,} \PYG{n}{kernel}\PYG{p}{)}
-\PYG{n}{bottom\PYGZus{}hat\PYGZus{}filtered} \PYG{o}{=} \PYG{n}{cv2}\PYG{o}{.}\PYG{n}{add}\PYG{p}{(}\PYG{n}{blackhat}\PYG{p}{,} \PYG{n}{cimg}\PYG{p}{)}
-\end{Verbatim}

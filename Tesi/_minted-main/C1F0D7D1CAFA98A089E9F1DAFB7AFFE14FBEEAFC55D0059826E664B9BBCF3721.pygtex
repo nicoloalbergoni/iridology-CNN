@@ -1,6 +1,0 @@
-\begin{Verbatim}[commandchars=\\\{\}]
-  \PYG{k}{def} \PYG{n+nf}{get\PYGZus{}average\PYGZus{}shape}\PYG{p}{(}\PYG{n}{cropped\PYGZus{}dict}\PYG{p}{):}
-   \PYG{n}{shapes} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{concatenate}\PYG{p}{(([}\PYG{n}{c}\PYG{o}{.}\PYG{n}{shape} \PYG{k}{for} \PYG{n}{c} \PYG{o+ow}{in} \PYG{n}{cropped\PYGZus{}dict}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}DB\PYGZus{}PROBS\PYGZsq{}}\PYG{p}{]],} \PYG{p}{[}\PYG{n}{c}\PYG{o}{.}\PYG{n}{shape} \PYG{k}{for} \PYG{n}{c} \PYG{o+ow}{in} \PYG{n}{cropped\PYGZus{}dict}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}DB\PYGZus{}NORMAL\PYGZsq{}}\PYG{p}{]]))}
-   \PYG{n}{means} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{around}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{mean}\PYG{p}{(}\PYG{n}{shapes}\PYG{p}{,} \PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{))}\PYG{o}{.}\PYG{n}{astype}\PYG{p}{(}\PYG{n+nb}{int}\PYG{p}{)}
-   \PYG{k}{return} \PYG{n}{means}
-\end{Verbatim}

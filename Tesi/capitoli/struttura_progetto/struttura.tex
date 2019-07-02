@@ -1,8 +1,0 @@
-Il progetto è composto da una serie di script python; la maggior parte è organizzata in moduli, ovvero collezioni di script che contengono solo funzioni o costanti, oltre a questi file sono anche presenti tre script direttamente eseguibili che richiamano le funzioni offerte da tali moduli.
-I due moduli creati sono:
-\begin{itemize}
-  \item \textbf{Preprocessing}: contiene gli script necessari alla fase preparazione dei dati per il training della rete neurale. In particolare contiene tutte le funzioni per l’elaborazione delle immagini, come filtri, metodi di riconoscimento dell’iride, etc...
-  \item \textbf{ML\_CNN}:  contiene gli script che permettono di creare, fare training e deploy del modello di rete neurale  
-\end{itemize}
-
-Gli script principali, ovvero quelli che poi verranno effettivamente mandati in esecuzione,  sono tre: \texttt{preprocess.py}, \texttt{train.py} e \texttt{predict.py}. \texttt{Preprocess.py} richiama le funzioni offerte dal modulo Preprocessing per elaborare le immagini in input al fine di  creare in output le immagini del segmento di iride selezionato. Lo script \texttt{train.py} utilizza le funzioni offerte dal modulo ML\_CNN per creare il dataset di training partendo dai segmenti precedentemente generati; successivamente, richiama i metodi per la generazione e il training del modello, producendo infine in output un file con estensione \texttt{.model} che rappresenta il modello appena creato. Infine lo script \texttt{predict.py} riutilizza il modulo Preprocessing per elaborare le nuove immagini su cui si vuole fare una previsione, così da produrre a sua volta i segmenti di iride. Si usa infine il modello scelto dall’utente e si producono in output le previsioni  generate dalla rete neurale.

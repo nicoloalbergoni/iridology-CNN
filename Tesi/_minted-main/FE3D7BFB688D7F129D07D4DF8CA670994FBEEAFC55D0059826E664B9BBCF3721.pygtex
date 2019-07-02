@@ -1,9 +1,0 @@
-\begin{Verbatim}[commandchars=\\\{\}]
-  \PYG{k}{def} \PYG{n+nf}{crop\PYGZus{}image}\PYG{p}{(}\PYG{n}{masked\PYGZus{}image}\PYG{p}{,} \PYG{n}{offset}\PYG{o}{=}\PYG{l+m+mi}{30}\PYG{p}{,} \PYG{n}{tollerance}\PYG{o}{=}\PYG{l+m+mi}{80}\PYG{p}{):}
-   \PYG{n}{mask} \PYG{o}{=} \PYG{n}{masked\PYGZus{}image} \PYG{o}{\PYGZgt{}} \PYG{n}{tollerance}
-   \PYG{n}{coords} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{argwhere}\PYG{p}{(}\PYG{n}{mask}\PYG{p}{)}
-   \PYG{n}{x0}\PYG{p}{,} \PYG{n}{y0} \PYG{o}{=} \PYG{n}{coords}\PYG{o}{.}\PYG{n}{min}\PYG{p}{(}\PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{)}
-   \PYG{n}{x1}\PYG{p}{,} \PYG{n}{y1} \PYG{o}{=} \PYG{n}{coords}\PYG{o}{.}\PYG{n}{max}\PYG{p}{(}\PYG{n}{axis}\PYG{o}{=}\PYG{l+m+mi}{0}\PYG{p}{)} \PYG{o}{+} \PYG{l+m+mi}{1}  \PYG{c+c1}{\PYGZsh{} slices are exclusive at the top}
-   \PYG{n}{cropped} \PYG{o}{=} \PYG{n}{masked\PYGZus{}image}\PYG{p}{[}\PYG{n}{x0} \PYG{o}{\PYGZhy{}} \PYG{n}{offset}\PYG{p}{:} \PYG{n}{x1} \PYG{o}{+} \PYG{n}{offset}\PYG{p}{,} \PYG{n}{y0} \PYG{o}{\PYGZhy{}} \PYG{n}{offset}\PYG{p}{:} \PYG{n}{y1} \PYG{o}{+} \PYG{n}{offset}\PYG{p}{]}
-   \PYG{k}{return} \PYG{n}{cropped}
-\end{Verbatim}

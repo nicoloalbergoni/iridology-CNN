@@ -1,4 +1,0 @@
-\begin{Verbatim}[commandchars=\\\{\}]
-  \PYG{n}{canny} \PYG{o}{=} \PYG{n}{cv2}\PYG{o}{.}\PYG{n}{Canny}\PYG{p}{(}\PYG{n}{thresh}\PYG{p}{,} \PYG{n}{config}\PYG{o}{.}\PYG{n}{HOUGH\PYGZus{}IRIS}\PYG{o}{.}\PYG{n}{getint}\PYG{p}{(}
-   \PYG{l+s+s1}{\PYGZsq{}CANNY\PYGZus{}TH1\PYGZsq{}}\PYG{p}{),} \PYG{n}{config}\PYG{o}{.}\PYG{n}{HOUGH\PYGZus{}IRIS}\PYG{o}{.}\PYG{n}{getint}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}CANNY\PYGZus{}TH2\PYGZsq{}}\PYG{p}{))}
-\end{Verbatim}
